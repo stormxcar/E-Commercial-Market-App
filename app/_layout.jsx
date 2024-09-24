@@ -1,15 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import {Slot,Stack} from 'expo-router'
+// import '../src/styles/tailwind.css';
+import useFonts from 'expo-font'
 
-const _layout = () => {
+// const Stack = createStackNavigatior();
+
+const RootLayout = () => {
   return (
-    <View style={styles.container}>
-      <Text>E Commercial market app</Text>
-    </View>
+    <Stack>
+      <Stack.Screen name="index" options={{headerShown:false}} />
+    </Stack>
+    // <Slot/> // cho phep chay file o muc con
   )
 }
 
-export default _layout
+export default RootLayout
 
 const styles = StyleSheet.create({
     container:{
@@ -17,6 +23,6 @@ const styles = StyleSheet.create({
        flex:1,
        alignItems: 'center',
        justifyContent:'center',
-       backgroundColor:'cyan'
+       backgroundColor:'#fff'
     }
 })

@@ -6,6 +6,7 @@ import {
   View,
   Image,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import image_main from "../../assets/images/logo_details.png";
@@ -13,6 +14,8 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
 import { CheckBox } from "react-native-elements";
+import { router } from "expo-router";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const LogIn = () => {
   const [form, setForm] = useState({
@@ -30,12 +33,21 @@ const LogIn = () => {
     // setIsSubmitting(true);
   };
   return (
-    <SafeAreaView className="h-full bg-white">
-      <ScrollView>
-        <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-4">
-          <Image source={image_main} className="w-[100px] h-[100px]" />
+    <SafeAreaView className="h-full bg-white px-8">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-2">
+          <TouchableOpacity className="w-full items-center pt-6">
+            <Image
+              resizeMode="contain"
+              source={image_main}
+              className="w-[100px] h-[100px]"
+            />
+          </TouchableOpacity>
+
           <Text className="text-4xl font-pblack text-[#00BDD6]">BKShop</Text>
-          <Text>All there, all cheap</Text>
+          <Text className="text-gray-500 font-plight">
+            All there, all cheap
+          </Text>
         </View>
 
         <FormField
@@ -78,23 +90,27 @@ const LogIn = () => {
 
         <View className="w-full flex-1 flex-row items-center justify-between">
           <CustomButton
-            title="Facebook"
             handlePress={submit}
             containerStyles="mt-7 flex-1 mr-2"
             isLoading={isSubmitting}
-          />
+          >
+            <Icon name="facebook" size={24} color="#fff" />
+          </CustomButton>
           <CustomButton
-            title="Google"
             handlePress={submit}
             containerStyles="mt-7 flex-1 mr-2"
             isLoading={isSubmitting}
-          />
+          >
+            <Icon name="google" size={24} color="#fff" />
+          </CustomButton>
+
           <CustomButton
-            title="Twitter"
             handlePress={submit}
             containerStyles="mt-7 flex-1"
             isLoading={isSubmitting}
-          />
+          >
+            <Icon name="apple" size={24} color="#fff" />
+          </CustomButton>
         </View>
 
         <View className="flex justify-center pt-5 flex-row gap-2">

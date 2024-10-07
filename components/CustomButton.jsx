@@ -7,7 +7,15 @@ import {
 } from "react-native";
 import React from "react";
 
-const CustomButton = ({ handlePress, containerStyles,isLoading ,textStyles,title}) => {
+
+const CustomButton = ({
+  handlePress,
+  containerStyles,
+  isLoading,
+  textStyles,
+  title,
+  children
+}) => {
   return (
     <TouchableOpacity
       onPress={handlePress}
@@ -17,9 +25,22 @@ const CustomButton = ({ handlePress, containerStyles,isLoading ,textStyles,title
       }`}
       disabled={isLoading}
     >
-      <Text className={`text-white font-psemibold text-lg ${textStyles}`}>
-        {title}
-      </Text>
+      <TouchableOpacity
+        onPress={handlePress}
+        style={[styles.button, containerStyles]}
+      >
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          children || (
+            <Text className={`text-white font-psemibold text-lg ${textStyles}`}>
+              {title}
+            </Text>
+          )
+        )}
+
+        
+      </TouchableOpacity>
 
       {isLoading && (
         <ActivityIndicator

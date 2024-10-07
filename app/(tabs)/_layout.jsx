@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 // create show tab icon and name
-const TabIcon = ({ icon, color, name, focused }) => {
+const TabIcon = ({ icon, color, name, focused ,size}) => {
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <Ionicons name={icon} size={20} color={focused ? "#f00" : color} />
+      <AntDesign name={icon} size={size} color={focused ? "#f00" : color} />
       <Text style={{ fontSize: 10, color: focused ? "#f00" : color }}>
         {name}
       </Text>
@@ -38,10 +38,11 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, size, focused }) => (
               <TabIcon
-                icon="home-outline"
+                icon="home"
                 color={color}
                 name="Home"
                 focused={focused}
+                size={30}
               />
             ),
           }}
@@ -54,10 +55,11 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, size, focused }) => (
               <TabIcon
-                icon="search"
+                icon="search1"
                 color={color}
                 name="Search"
                 focused={focused}
+                size={30}
               />
             ),
           }}
@@ -70,10 +72,11 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, size, focused }) => (
               <TabIcon
-                icon="heart-outline"
+                icon="hearto"
                 color={color}
                 name="Favorites"
                 focused={focused}
+                size={30}
               />
             ),
           }}
@@ -86,10 +89,11 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, size, focused }) => (
               <TabIcon
-                icon="mail-outline"
+                icon="message1"
                 color={color}
                 name="Inbox"
                 focused={focused}
+                size={30}
               />
             ),
           }}
@@ -102,10 +106,11 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, size, focused }) => (
               <TabIcon
-                icon="person-outline"
+                icon="user"
                 color={color}
                 name="Account"
                 focused={focused}
+                size={30}
               />
             ),
           }}

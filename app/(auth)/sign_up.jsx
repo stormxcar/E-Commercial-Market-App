@@ -32,8 +32,8 @@ const SignUp = () => {
     // setIsSubmitting(true);
   };
   return (
-    <SafeAreaView className="h-full bg-white">
-      <ScrollView>
+    <SafeAreaView className="h-full bg-white px-8">
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-4">
           <Image source={image_main} className="w-[100px] h-[100px]" />
           <Text className="text-4xl font-pblack text-[#00BDD6]">BKShop</Text>

@@ -4,9 +4,9 @@ import React from "react";
 const CategorySelect = ({ img, categoryName }) => {
   return (
     <TouchableOpacity className="flex flex-col items-center justify-center pr-3 gap-3">
-      <View className="bg-purple-300 rounded-full w-[120px] h-[120px] flex items-center justify-center p-4">
+      <View className="bg-purple-300 rounded-full w-[100px] h-[100px] flex items-center justify-center p-4">
         <Image
-          className="w-[60px] h-[50px]"
+          className="w-[50px] h-[50px]"
           source={{ uri: img }}
           resizeMode="contain"
         />

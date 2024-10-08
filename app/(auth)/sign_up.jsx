@@ -19,10 +19,9 @@ const SignUp = () => {
     username: "",
     email: " ",
     password: "",
-    confirmPassword:''
+    confirmPassword: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const submit = () => {
     if (form.email === "" || form.password === "" || form.username === "") {
@@ -32,12 +31,14 @@ const SignUp = () => {
     // setIsSubmitting(true);
   };
   return (
-    <SafeAreaView className="h-full bg-white px-8">
+    <SafeAreaView className="h-full bg-white px-8 py-10">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-4">
+        <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-4 pt-5">
           <Image source={image_main} className="w-[100px] h-[100px]" />
           <Text className="text-4xl font-pblack text-[#00BDD6]">BKShop</Text>
-          <Text>All there, all cheap</Text>
+          <Text className="text-gray-500 font-plight">
+            All there, all cheap
+          </Text>
         </View>
 
         <FormField
@@ -62,7 +63,7 @@ const SignUp = () => {
           handleChangeText={(e) => setForm({ ...form, password: e })}
           otherStyles="mt-7"
         />
-         <FormField
+        <FormField
           title="Confirm password"
           placeholder={"**********"}
           value={form.confirmPassword}
@@ -77,13 +78,13 @@ const SignUp = () => {
           isLoading={isSubmitting}
         />
 
-        <View className="flex justify-center pt-5 flex-row gap-2">
-          <Text className="text-lg text-gray-600 font-pregular">
+        <View className="flex justify-center pt-5 flex-row gap-2 flex-wrap">
+          <Text className="text-base text-gray-600 font-pregular">
             Already have an account?
           </Text>
           <Link
             href="/log_in"
-            className="text-lg font-psemibold text-secondary"
+            className="text-base font-psemibold text-blue-600"
           >
             Login now
           </Link>

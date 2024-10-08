@@ -1,13 +1,5 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from "react-native";
 import React from "react";
-import { Link, router } from "expo-router";
+import { SafeAreaView, View, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const HeaderShown = () => {

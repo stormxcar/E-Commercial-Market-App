@@ -6,13 +6,13 @@ const ProductCard = ({ img, name, countReviews, price }) => {
   return (
     <View className="bg-gray-200 w-[150px] py-3 px-4 mr-3 rounded-lg">
       <Image source={{ uri: img }} className="w-full h-[150px] object-cover text-center" />
-      <Text className="py-2 font-base font-pregular">{name}</Text>
+      <Text className="py-2 text-base font-psemibold">{name}</Text>
       <View className="flex flex-row w-full justify-between items-center">
-        <View className="flex flex-row items-center gap-2">
-          <AntDesign name="star" size={24} color="black" />
-          <Text className="font-base font-pregular">{countReviews}</Text>
+        <View className="flex flex-row items-center gap-2 justify-center">
+          <AntDesign name="star" size={24} color="yellow" />
+          <Text className="text-base font-pregular">{countReviews}</Text>
         </View>
-        <Text className="font-base font-pregular">${price}</Text>
+        <Text className="text-base font-pregular">${price}</Text>
       </View>
     </View>
   );

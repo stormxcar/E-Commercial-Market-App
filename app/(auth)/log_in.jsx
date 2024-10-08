@@ -36,7 +36,7 @@ const LogIn = () => {
     <SafeAreaView className="h-full bg-white px-8">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-2">
-          <TouchableOpacity className="w-full items-center pt-6">
+          <TouchableOpacity className="w-full items-center pt-20">
             <Image
               resizeMode="contain"
               source={image_main}
@@ -66,7 +66,7 @@ const LogIn = () => {
           otherStyles="mt-7"
         />
 
-        <View className="flex justify-start items-center flex-row">
+        <View className=" p-0 flex justify-start items-center flex-row">
           <CheckBox
             checked={isChecked}
             onPress={() => setIsChecked(!isChecked)}
@@ -77,13 +77,13 @@ const LogIn = () => {
         <CustomButton
           title="Sign In"
           handlePress={submit}
-          containerStyles="mt-7"
+          containerStyles="mt-1"
           isLoading={isSubmitting}
         />
 
         <View className="flex-1 items-center justify-center pt-5">
           <View className="relative w-full items-center">
-            <View className="absolute w-full h-0.5 bg-gray-500 top-1/2" />
+            <View className="absolute w-full h-[1px] bg-gray-500 top-1/2" />
             <Text className="font-plight bg-white px-2">OR</Text>
           </View>
         </View>
@@ -94,14 +94,14 @@ const LogIn = () => {
             containerStyles="mt-7 flex-1 mr-2"
             isLoading={isSubmitting}
           >
-            <Icon name="facebook" size={24} color="#fff" />
+            <Icon name="facebook" size={24} color="blue" />
           </CustomButton>
           <CustomButton
             handlePress={submit}
             containerStyles="mt-7 flex-1 mr-2"
             isLoading={isSubmitting}
           >
-            <Icon name="google" size={24} color="#fff" />
+            <Icon name="google" size={24} color="red" />
           </CustomButton>
 
           <CustomButton
@@ -109,17 +109,17 @@ const LogIn = () => {
             containerStyles="mt-7 flex-1"
             isLoading={isSubmitting}
           >
-            <Icon name="apple" size={24} color="#fff" />
+            <Icon name="apple" size={24} color="black" />
           </CustomButton>
         </View>
 
-        <View className="flex justify-center pt-5 flex-row gap-2">
-          <Text className="text-lg text-gray-600 font-pregular">
+        <View className="flex justify-center pt-5 pb-8 flex-row gap-2">
+          <Text className="text-base text-gray-600 font-pregular">
             Don't have an account?
           </Text>
           <Link
             href="/sign_up"
-            className="text-lg font-psemibold text-secondary"
+            className="text-base font-psemibold text-blue-600"
           >
             Signup
           </Link>

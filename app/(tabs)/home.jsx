@@ -88,7 +88,7 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1 bg-white py-3">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <HeaderShown />
+        {/* <HeaderShown title={'All Deals'}/> */}
         <SearchBox />
 
         <FlatList
@@ -96,7 +96,11 @@ const Home = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
             return (
-              <CategorySelect img={item.img} categoryName={item.categoryName} />
+              <CategorySelect
+                img={item.img}
+                categoryName={item.categoryName}
+                containerStyles={(className = "")}
+              />
             );
           }}
           horizontal // Thêm thuộc tính horizontal để dàn các mục ra hàng ngang
@@ -147,7 +151,6 @@ const Home = () => {
               }}
               horizontal // Thêm thuộc tính horizontal để dàn các mục ra hàng ngang
               showsHorizontalScrollIndicator={false} // Ẩn thanh cuộn ngang
-              
             />
           </View>
         </View>

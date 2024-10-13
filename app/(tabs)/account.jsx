@@ -9,8 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import React from "react";
-import HeaderShown from "../../components/headerShown";
-import CategorySelect from "../../components/CategorySelect";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Account = () => {
   const dataCategory = [
@@ -48,14 +47,14 @@ const Account = () => {
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="flex-1 pb-4">
-        <View className="px-5 py-5 flex flex-row w-full items-center gap-3">
+        <View className="px-5 pt-5 py-2 flex flex-row w-full items-center gap-3">
           <Image
             source={{ uri: "https://picsum.photos/200" }}
             className="w-10 h-10 rounded-full"
           />
           <View>
-            <Text>Nguyen Kha</Text>
-            <Text>Welcome back!</Text>
+            <Text className="text-base font-pmedium">Nguyen Kha</Text>
+            <Text className="text-base font-pregular">Welcome back!</Text>
           </View>
         </View>
 
@@ -120,30 +119,37 @@ const Account = () => {
           </View>
         </View>
 
-        <View className="px-5 py-5">
-          <TouchableOpacity className="mb-3">
-            <Text>Return item</Text>
+        <View className="px-5 py-5 flex flex-row w-full justify-between">
+          <TouchableOpacity className=" flex-1 border-2 mr-3 border-black bg-white p-3 rounded-lg">
+            <Text className="text-base text-center font-psemibold text-black">
+              Return item
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Track Order</Text>
+          <TouchableOpacity className=" flex-1 p-3 rounded-lg bg-[#00BDD6]">
+            <Text className="text-base text-center font-psemibold text-white">
+              Track Order
+            </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="px-5 py-3">
-          <View className="flex flex-row items-center justify-between mb-3">
-            <Text>Summary</Text>
-            <TouchableOpacity>
-              <Text>View Details</Text>
+        <View className="px-5 py-4 flex flex-col items-center">
+          <View className="flex flex-row items-center justify-between mb-6 w-full">
+            <Text className="font-psemibold text-base">Summary</Text>
+            <TouchableOpacity className="flex flex-row items-center p-2 border-[1px] border-gray-300 rounded-md">
+              <Text className="font-pregular">View Details</Text>
+              <AntDesign name="right" size={22} color="black" />
             </TouchableOpacity>
           </View>
-          <View className="flex flex-row justify-between">
-            <View className="w-[50%] border-2">
+          <View className="flex flex-row justify-between w-full px-3">
+            <View className="flex-1 mr-6 w-full border-[1px] p-3 flex flex-col gap-3 border-gray-300">
               <Text className="text-base font-pmedium">Total Orders</Text>
-              <Text>2</Text>
+              <Text className="text-base font-pblack">2</Text>
+              <Text className="font-pregular">+10%</Text>
             </View>
-            <View className="w-[50%] border-2">
+            <View className="flex-1 w-full border-[1px] p-3 flex flex-col gap-3 border-gray-300">
               <Text className="text-base font-pmedium">Total Spent</Text>
-              <Text>$200</Text>
+              <Text className="text-base font-pblack">$200</Text>
+              <Text className="font-pregular">-2%</Text>
             </View>
           </View>
         </View>
@@ -153,9 +159,3 @@ const Account = () => {
 };
 
 export default Account;
-
-const styles = StyleSheet.create({
-  flatListContent: {
-    justifyContent: "center",
-  },
-});

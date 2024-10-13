@@ -13,8 +13,9 @@ import CategorySelect from "../../components/CategorySelect";
 import CategoryCard from "../../components/CategoryCard";
 import CustomButton from "../../components/CustomButton";
 import ProductCard from "../../components/ProductCard";
+import productDetail from "../details/productDetail";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const dataCategory = [
     {
       id: 1,
@@ -146,6 +147,7 @@ const Home = () => {
                     name={item.name}
                     countReviews={item.countReviews}
                     price={item.price}
+                    productId={item.id}
                   />
                 );
               }}

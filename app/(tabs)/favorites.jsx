@@ -1,14 +1,46 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import React from "react";
 
 const Favorites = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-slate-300">
-      <Text className="font-plight">favorites</Text>
-    </View>
-  )
-}
+    <SafeAreaView>
+      <ScrollView>
+        <View>
+          <Text>Recommended products</Text>
+          <View>{/* show list product card watched */}</View>
+        </View>
 
-export default Favorites
+        <View>
+          <TouchableOpacity>
+            <Text>Filter</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>Continue shopping</Text>
+          </TouchableOpacity>
+        </View>
 
-const styles = StyleSheet.create({})
+        <View>
+          <Text>Your favorites</Text>
+          <TouchableOpacity>
+            <Text>See all</Text>
+            {/* icon */}
+          </TouchableOpacity>
+        </View>
+        <View>
+          <View>{/* show list product card favorite */}</View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default Favorites;
+
+const styles = StyleSheet.create({});

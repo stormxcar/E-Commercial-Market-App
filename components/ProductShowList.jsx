@@ -40,7 +40,7 @@ const ProductList = () => {
   ];
 
   return (
-    <SafeAreaView className="px-5">
+    <SafeAreaView className="px-5 py-5">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full h-[200px] rounded-lg">
           <Image
@@ -61,7 +61,7 @@ const ProductList = () => {
             </TouchableOpacity>
             <View className="py-4 flex flex-row flex-wrap justify-between">
               {dataProductCard.map((item) => (
-                <View className="w-[46%] m-2" key={item.id}>
+                <View className="w-[47%] m-1" key={item.id}>
                   <CardList
                     containerStyles={"w-full"}
                     imageStyles={"w-full h-[150px]"}

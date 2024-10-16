@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
-import React , {useEffect} from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 // import '../src/styles/tailwind.css';
 import { useFonts } from "expo-font";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import  TabsLayout  from "./(tabs)/_layout";
+import ProductList from "../components/ProductShowList";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -41,11 +43,51 @@ const RootLayout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="details/productDetail" options={{ headerShown: false }} /> */}
-      {/* <Stack.Screen name="details/ProductList" options={{ headerShown: false }} /> */}
+      <Stack.Screen
+        name="details/ProductList"
+        options={{
+          title: "Product list",
+          headerRight: () => (
+            <View className="flex flex-row items-center gap-2">
+              <TouchableOpacity>
+                <AntDesign name="shoppingcart" size={30} color="black" />
+              </TouchableOpacity>
+              <View>
+                <Image
+                  source={{ uri: "https://picsum.photos/200" }}
+                  className="border-2 w-10 h-10 rounded-full"
+                  width={30}
+                  height={30}
+                  resizeMode="contain"
+                />
+              </View>
+            </View>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="details/productDetail"
+        options={{
+          title: "Detail",
+          headerRight: () => (
+            <View className="flex flex-row items-center gap-2">
+              <TouchableOpacity>
+                <AntDesign name="shoppingcart" size={30} color="black" />
+              </TouchableOpacity>
+              <View>
+                <Image
+                  source={{ uri: "https://picsum.photos/200" }}
+                  className="border-2 w-10 h-10 rounded-full"
+                  width={30}
+                  height={30}
+                  resizeMode="contain"
+                />
+              </View>
+            </View>
+          ),
+        }}
+      />
     </Stack>
-    // <Slot/> // cho phep chay file o muc con
   );
 };
 

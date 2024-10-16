@@ -13,7 +13,7 @@ const ProductList = () => {
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => {
           if (item.key === "header") {
-            return <HeaderShown title={"Fresh Fruits"} />;
+            return <></>;
           } else {
             return <ProductShowList />;
           }

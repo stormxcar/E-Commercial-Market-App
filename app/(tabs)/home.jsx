@@ -132,7 +132,7 @@ const Home = () => {
         <View className="flex-1 p-5">
           <View className="flex flex-row items-center justify-between w-full mb-4">
             <Text className="font-base font-pregular">Recommended for you</Text>
-            <Link href="details/productList">
+            <Link href="../details/ProductList">
               <Text className="font-base font-psemibold">View all</Text>
             </Link>
           </View>

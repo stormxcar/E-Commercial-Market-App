@@ -34,6 +34,11 @@ const Search = () => {
       name: "Musician",
       img: "https://picsum.photos/200",
     },
+    {
+      id: 5,
+      name: "Food",
+      img: "https://picsum.photos/200",
+    },
   ];
 
   const dataProduct = [
@@ -81,22 +86,24 @@ const Search = () => {
           <Text className="font-psemibold text-md py-2">
             Trending search category recently
           </Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View className="flex flex-row w-full p-2">
-              {dataSearchPop.map((item) => (
-                <View
-                  className="flex flex-row items-center bg-gray-300 rounded-md p-2 px-5 mr-4"
-                  key={item.id}
-                >
-                  <Image
-                    source={{ uri: item.img }}
-                    className="w-6 h-6 object-cover mr-2 bg-pink-600 rounded-full"
-                  />
-                  <Text>{item.name}</Text>
-                </View>
-              ))}
-            </View>
-          </ScrollView>
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View className="flex flex-row w-full py-3">
+                {dataSearchPop.map((item) => (
+                  <View
+                    className="flex flex-row items-center bg-gray-300 rounded-md p-4 px-5 mr-4"
+                    key={item.id}
+                  >
+                    <Image
+                      source={{ uri: item.img }}
+                      className="w-6 h-6 object-cover mr-2 bg-pink-600 rounded-full"
+                    />
+                    <Text>{item.name}</Text>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
         </View>
         <View className="px-5 py-3">
           <TouchableOpacity className="w-full rounded-md bg-[#00bdd6] p-4">
@@ -106,7 +113,7 @@ const Search = () => {
           </TouchableOpacity>
           <View className="py-4 flex flex-row flex-wrap justify-between">
             {dataProduct.map((item) => (
-              <View className=" w-[46%] m-2 " key={item.id}>
+              <View className=" w-[47%] m-1 " key={item.id}>
                 <ProductCard
                   containerStyles={"w-full"}
                   img={item.img}

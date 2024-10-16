@@ -33,11 +33,11 @@ const CardList = ({ ratingChanged, containerStyles, img, name, price , imageStyl
             activeColor="#ffd700"
           /> */}
 
-            <AntDesign name="star" size={18} color="orange" />
-            <AntDesign name="star" size={18} color="orange" />
-            <AntDesign name="star" size={18} color="orange" />
-            <AntDesign name="star" size={18} color="orange" />
-            <AntDesign name="star" size={18} color="orange" />
+            <AntDesign name="star" size={14} color="orange" />
+            <AntDesign name="star" size={14} color="orange" />
+            <AntDesign name="star" size={14} color="orange" />
+            <AntDesign name="star" size={14} color="orange" />
+            <AntDesign name="star" size={14} color="orange" />
           </View>
           <Text className="text-base font-pregular">{price}</Text>
         </View>

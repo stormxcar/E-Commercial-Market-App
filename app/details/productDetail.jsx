@@ -20,7 +20,7 @@ const ProductDetail = () => {
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => {
           if (item.key === "header") {
-            return <HeaderShown title={"Headphone"} />;
+            return <></>;
           } else {
             return <ProductShowDetail />;
           }

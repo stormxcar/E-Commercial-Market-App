@@ -3,10 +3,10 @@ import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 
-const ProductCard = ({ img, name, countReviews, price, productId}) => {
+const ProductCard = ({ img, name, countReviews, price, containerStyles}) => {
   return (
     <Link href="details/productDetail" asChild>
-      <TouchableOpacity className="bg-gray-200 w-[150px] py-3 px-4 mr-3 rounded-lg">
+      <TouchableOpacity className={`bg-gray-200 ${containerStyles} py-3 px-4 mr-3 rounded-lg`}>
         <Image
           source={{ uri: img }}
           className="w-full h-[150px] object-cover text-center"

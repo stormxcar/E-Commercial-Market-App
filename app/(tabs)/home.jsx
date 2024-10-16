@@ -2,20 +2,19 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
+  TouchableOpacity,
   Text,
   View,
 } from "react-native";
 import React from "react";
-import HeaderShown from "../../components/headerShown";
 import SearchBox from "../../components/SearchBox";
 import CategorySelect from "../../components/CategorySelect";
 import CategoryCard from "../../components/CategoryCard";
 import CustomButton from "../../components/CustomButton";
 import ProductCard from "../../components/ProductCard";
-import productDetail from "../details/productDetail";
+import { Link } from "expo-router";
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const dataCategory = [
     {
       id: 1,
@@ -133,7 +132,9 @@ const Home = ({ navigation }) => {
         <View className="flex-1 p-5">
           <View className="flex flex-row items-center justify-between w-full mb-4">
             <Text className="font-base font-pregular">Recommended for you</Text>
-            <Text className="font-base font-psemibold">View all</Text>
+            <Link href="details/productList">
+              <Text className="font-base font-psemibold">View all</Text>
+            </Link>
           </View>
 
           <View>
@@ -148,6 +149,7 @@ const Home = ({ navigation }) => {
                     countReviews={item.countReviews}
                     price={item.price}
                     productId={item.id}
+                    containerStyles={"w-[150px]"}
                   />
                 );
               }}

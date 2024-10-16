@@ -3,6 +3,7 @@ import React , {useEffect} from "react";
 import { SplashScreen, Stack } from "expo-router";
 // import '../src/styles/tailwind.css';
 import { useFonts } from "expo-font";
+import { NavigationContainer } from '@react-navigation/native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,7 +42,8 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="details/productDetail" options={{ headerShown: false }} />
+      {/* <Stack.Screen name="details/productDetail" options={{ headerShown: false }} /> */}
+      {/* <Stack.Screen name="details/ProductList" options={{ headerShown: false }} /> */}
     </Stack>
     // <Slot/> // cho phep chay file o muc con
   );

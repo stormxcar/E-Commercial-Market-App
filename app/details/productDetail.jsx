@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import React from "react";
 import HeaderShown from "../../components/headerShown";
-import ProductDetail from "../../components/ProductDetail";
+import ProductShowDetail from "../../components/ProductShowDetail";
 
-const productDetail = () => {
+const ProductDetail = () => {
   const data = [{ key: "header" }, { key: "content" }];
 
   return (
@@ -22,7 +22,7 @@ const productDetail = () => {
           if (item.key === "header") {
             return <HeaderShown title={"Headphone"} />;
           } else {
-            return <ProductDetail />;
+            return <ProductShowDetail />;
           }
         }}
       />
@@ -30,6 +30,6 @@ const productDetail = () => {
   );
 };
 
-export default productDetail;
+export default ProductDetail;
 
 const styles = StyleSheet.create({});

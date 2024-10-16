@@ -4,36 +4,43 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import ReactStars from "react-rating-stars-component";
 
-const CardList = () => {
+const CardList = ({ ratingChanged, containerStyles, img, name, price , imageStyles}) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity className={` ${containerStyles} bg-gray-200 rounded-lg`}>
       <View>
         <Image
-          source={{ uri: "https://picsum.photos/200" }}
-          className="w-full h-16 object-cover"
+          source={{ uri: img }}
+          className={`object-cover overflow-hidden rounded-lg border-2 ${imageStyles}`}
         />
       </View>
-      <View>
-        <Text>Pear</Text>
-        <TouchableOpacity>
-          <MaterialIcons name="add-circle" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <View>
-          <ReactStars
+      <View className="flex justify-between flex-1">
+        <View className="px-2 flex flex-row justify-between items-center py-2">
+          <Text className="text-base font-pregular">{name}</Text>
+          <TouchableOpacity>
+            <MaterialIcons name="add-circle" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View className="px-2 flex flex-row justify-between items-center pb-2">
+          <View className="flex flex-row ">
+            {/* <ReactStars
             count={5}
             onChange={ratingChanged}
             size={24}
             isHalf={false}
-            edit={false}
+            edit={true}
             emptyIcon={<AntDesign name="staro" size={24} color="black" />}
-            // halfIcon={<i className="fa fa-star-half-alt"></i>}
             fullIcon={<AntDesign name="star" size={24} color="black" />}
             activeColor="#ffd700"
-          />
+          /> */}
+
+            <AntDesign name="star" size={18} color="orange" />
+            <AntDesign name="star" size={18} color="orange" />
+            <AntDesign name="star" size={18} color="orange" />
+            <AntDesign name="star" size={18} color="orange" />
+            <AntDesign name="star" size={18} color="orange" />
+          </View>
+          <Text className="text-base font-pregular">{price}</Text>
         </View>
-        <Text>$3</Text>
       </View>
     </TouchableOpacity>
   );

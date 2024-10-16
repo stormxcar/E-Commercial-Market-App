@@ -7,14 +7,45 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
-  Image
+  Image,
 } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import HeaderShown from "../../components/headerShown";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import Home from "./home";
+import Search from "./search";
+import Account from "./account";
+import Inbox from "./inbox";
+import Favorites from "./favorites";
 
-// create show tab icon and name
+// import ProductDetail from "../details/productDetail";
+// import ProductList from "../details/productList";
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Home"
+      component={Home}
+      options={{ headerShown: false }}
+    />
+    {/* <Stack.Screen
+      name="productList"
+      component={ProductList}
+      options={{ headerShown: true }}
+    />
+    <Stack.Screen
+      name="ProductDetail"
+      component={ProductDetail}
+      options={{ headerShown: false }}
+    /> */}
+  </Stack.Navigator>
+);
+
 const TabIcon = ({ icon, color, name, focused, size }) => {
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -28,15 +59,13 @@ const TabIcon = ({ icon, color, name, focused, size }) => {
 
 const TabsLayout = () => {
   return (
-    // /* bố cục không bị phản ứng với bàn phím */
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {/* cho phép tắt bàn phím khi người dùng ấn ra ngoài nó */}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ flex: 1 }}>
-          <Tabs
+          <Tab.Navigator
             screenOptions={{
               tabBarShowLabel: false,
               tabBarActiveTintColor: "#FFA001",
@@ -48,29 +77,35 @@ const TabsLayout = () => {
                 height: 84,
               },
               headerRight: () => (
-                <View className="flex flex-row items-center gap-2 pr-6">
-                  <TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginRight: 10,
+                  }}
+                >
+                  <TouchableOpacity style={{ marginRight: 10 }}>
                     <AntDesign name="shoppingcart" size={30} color="black" />
                   </TouchableOpacity>
-
-                  <View className="">
-                    <Image
-                      source={{ uri: "https://picsum.photos/200" }}
-                      className="border-2 w-10 h-10 rounded-full"
-                      width={25}
-                      height={25}
-                      resizeMode="contain"
-                    />
-                  </View>
+                  <Image
+                    source={{ uri: "https://picsum.photos/200" }}
+                    style={{
+                      borderWidth: 2,
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                    }}
+                    resizeMode="contain"
+                  />
                 </View>
               ),
             }}
           >
-            <Tabs.Screen
-              name="home"
+            <Tab.Screen
+              name="HomeTab"
+              component={HomeStack}
               options={{
                 title: "Home",
-
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="home"
@@ -82,12 +117,11 @@ const TabsLayout = () => {
                 ),
               }}
             />
-
-            <Tabs.Screen
-              name="search"
+            <Tab.Screen
+              name="Search"
+              component={Search}
               options={{
                 title: "Search",
-
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="search1"
@@ -99,12 +133,11 @@ const TabsLayout = () => {
                 ),
               }}
             />
-
-            <Tabs.Screen
-              name="favorites"
+            <Tab.Screen
+              name="Favorites"
+              component={Favorites}
               options={{
                 title: "Favorites",
-
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="hearto"
@@ -116,12 +149,11 @@ const TabsLayout = () => {
                 ),
               }}
             />
-
-            <Tabs.Screen
-              name="inbox"
+            <Tab.Screen
+              name="Inbox"
+              component={Inbox}
               options={{
                 title: "Inbox",
-
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="message1"
@@ -133,12 +165,11 @@ const TabsLayout = () => {
                 ),
               }}
             />
-
-            <Tabs.Screen
-              name="account"
+            <Tab.Screen
+              name="Account"
+              component={Account}
               options={{
                 title: "Account",
-
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="user"
@@ -159,14 +190,14 @@ const TabsLayout = () => {
                     <TouchableOpacity style={{ marginRight: 10 }}>
                       <AntDesign name="setting" size={24} color="black" />
                     </TouchableOpacity>
-                    <Text className="font-psemibold text-base">
+                    <Text style={{ fontWeight: "600", fontSize: 16 }}>
                       Settings
                     </Text>
                   </View>
                 ),
               }}
             />
-          </Tabs>
+          </Tab.Navigator>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

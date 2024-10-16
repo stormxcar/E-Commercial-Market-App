@@ -1,18 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View , Image } from "react-native";
 import React from "react";
 
-const MessageNotify = ({ nameFrom, status, time }) => {
+const MessageNotify = ({ nameFrom, status, time, img }) => {
   return (
-    <View>
-      <View>
-        {/* icon */}
+    <View className="border-b-[1px] py-3 flex flex-row justify-between items-center">
+      <View className="flex flex-row gap-2">
+        <View className="p-3 bg-pink-100 rounded-full">
+          <Image source={{ uri: img }} className="w-5 h-5 object-cover" />
+        </View>
         <View>
-          <Text>Message</Text>
-          <Text>new message</Text>
+          <Text className="text-base font-pregular">{nameFrom}</Text>
+          <Text className="text-xs font-pregular">{status}</Text>
         </View>
       </View>
       <View>
-        <Text>time</Text>
+        <Text className="font-plight text-sm">{time}</Text>
       </View>
     </View>
   );

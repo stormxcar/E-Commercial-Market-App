@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, FlatList } from "react-native";
 import React from "react";
-import ProductList from "../../components/ProductList";
+import ProductShowList from "../../components/ProductShowList";
+import HeaderShown from "../../components/headerShown";
 
-const productList = () => {
+const ProductList = () => {
   const data = [{ key: "header" }, { key: "content" }];
 
   return (
@@ -14,7 +15,7 @@ const productList = () => {
           if (item.key === "header") {
             return <HeaderShown title={"Fresh Fruits"} />;
           } else {
-            return <ProductList />;
+            return <ProductShowList />;
           }
         }}
       />
@@ -22,6 +23,6 @@ const productList = () => {
   );
 };
 
-export default productList;
+export default ProductList;
 
 const styles = StyleSheet.create({});

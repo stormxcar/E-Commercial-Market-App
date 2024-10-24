@@ -13,7 +13,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from "./home";
 import Search from "./search";
@@ -21,15 +21,18 @@ import Favorites from "./favorites";
 import Inbox from "./inbox";
 import Account from "./account";
 import ProductList from "../details/ProductList";
+import ProductList_2 from "../details/ProductList_2";
+import ProductDetail_2 from "../details/ProductDetail_2";
+import Checkout from "../details/Checkout";
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 // Tạo HomeStack với Stack.Navigator
 const HomeStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="home"
+      name="HomeScreen"
       component={Home}
       options={{ headerShown: false }}
     />
@@ -38,6 +41,22 @@ const HomeStack = () => (
       component={ProductList}
       options={{ headerShown: true, title: "Product List" }}
     />
+     <Stack.Screen
+      name="ProductList_2"
+      component={ProductList_2}
+      options={{ headerShown: true, title: "Product List" }}
+    />
+    <Stack.Screen
+      name="ProductDetail_2"
+      component={ProductDetail_2}
+      options={{ headerShown: false, title: "Product Detail 2" }}
+    />
+    <Stack.Screen
+      name="Checkout"
+      component={Checkout}
+      options={{ headerShown: false, title: "Checkout" }}
+    />
+
   </Stack.Navigator>
 );
 
@@ -45,7 +64,7 @@ const HomeStack = () => (
 const SearchStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="search"
+      name="SearchScreen"
       component={Search}
       options={{ headerShown: false }} // Không hiện header khi ở trang Search
     />
@@ -57,7 +76,7 @@ const SearchStack = () => (
 const FavoritesStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="favorites"
+      name="FavoritesScreen"
       component={Favorites}
       options={{ headerShown: false }} // Không hiện header khi ở trang Favorites
     />
@@ -69,7 +88,7 @@ const FavoritesStack = () => (
 const InboxStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="inbox"
+      name="InboxScreen"
       component={Inbox}
       options={{ headerShown: false }} // Không hiện header khi ở trang Inbox
     />
@@ -81,7 +100,7 @@ const InboxStack = () => (
 const AccountStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="account"
+      name="AccountScreen"
       component={Account}
       options={{ headerShown: false }} // Không hiện header khi ở trang Account
     />
@@ -145,7 +164,7 @@ const TabsLayout = () => {
             })}
           >
             <Tab.Screen
-              name="home"
+              name="HomeTab"
               component={HomeStack}
               options={{
                 tarBarLabel: "home",
@@ -161,10 +180,10 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="search"
+              name="SearchTab"
               component={SearchStack}
               options={{
-                tarBarLabel: "search",
+                tarBarLabel: "Search",
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="search1"
@@ -177,10 +196,10 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="favorites"
+              name="FavoritesTab"
               component={FavoritesStack}
               options={{
-                tarBarLabel: "favorites",
+                tarBarLabel: "Favorites",
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="hearto"
@@ -193,10 +212,10 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="inbox"
+              name="InboxTab"
               component={InboxStack}
               options={{
-                tarBarLabel: "inbox",
+                tarBarLabel: "Inbox",
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="message1"
@@ -209,10 +228,10 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="account"
+              name="AccountTab"
               component={AccountStack}
               options={{
-                tarBarLabel: "account",
+                tarBarLabel: "Account",
                 tabBarIcon: ({ color, size, focused }) => (
                   <TabIcon
                     icon="user"

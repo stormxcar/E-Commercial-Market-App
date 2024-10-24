@@ -14,7 +14,15 @@ import CustomButton from "../../components/CustomButton";
 import ProductCard from "../../components/ProductCard";
 import { Link } from "expo-router";
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "expo-router";
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
 const Home = () => {
+  const navigation = useNavigation();
   const dataCategory = [
     {
       id: 1,
@@ -141,6 +149,7 @@ const Home = () => {
             <FlatList
               data={dataProduct}
               keyExtractor={(item) => item.id}
+              ld
               renderItem={({ item }) => {
                 return (
                   <ProductCard

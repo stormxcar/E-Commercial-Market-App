@@ -65,7 +65,7 @@ const Inbox = () => {
         {dataCategory.map((item) => (
           <TouchableOpacity
             key={item.id}
-            className="flex flex-col items-center p-3 w-[94px] mb-3 mr-3 rounded-lg"
+            className="flex flex-col items-center py-3 w-[50px] mb-3 mr-3 rounded-lg"
           >
             <View className="bg-purple-200 rounded-full flex p-4 mb-3">
               <Image
@@ -74,7 +74,7 @@ const Inbox = () => {
                 resizeMode="cover"
               />
             </View>
-            <Text className="font-pregular text-xs text-center flex-wrap">
+            <Text className="font-pregular text-[11px] text-center flex-wrap">
               {item.categoryName}
             </Text>
           </TouchableOpacity>

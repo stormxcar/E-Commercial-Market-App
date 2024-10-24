@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProductCard from "./ProductCard";
+import { Link } from "expo-router";
 
 const ProgressBar = ({ percentage, label }) => {
   return (
@@ -263,11 +264,13 @@ const ProductDetail = () => {
             <Ionicons name="cart-outline" size={24} color="#00bdd6" />
           </View>
 
-          <TouchableOpacity className="flex-1">
-            <Text className="rounded-sm font-pregular text-base w-full bg-[#00bdd6] text-white text-center p-3">
-              Buy now
-            </Text>
-          </TouchableOpacity>
+          <Link href="./Checkout" asChild>
+            <TouchableOpacity className="flex-1">
+              <Text className="rounded-sm font-pregular text-base w-full bg-[#00bdd6] text-white text-center p-3">
+                Buy now
+              </Text>
+            </TouchableOpacity>
+          </Link>
         </View>
       </ScrollView>
     </SafeAreaView>

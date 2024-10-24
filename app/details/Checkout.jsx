@@ -11,6 +11,7 @@ import {
 import React from "react";
 import CardCheckout from "../../components/CardCheckout";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { Link } from "expo-router";
 
 const Checkout = () => {
   const data = [{ key: "header" }, { key: "content" }];
@@ -52,12 +53,14 @@ const Checkout = () => {
                   </Text>
                 </View>
 
-                <TouchableOpacity className="flex-1 bg-[#00bdd6] flex-row items-center justify-center p-4 rounded-md my-3">
-                  <Text className="font-pregular text-base text-white text-center">
-                    Next
-                  </Text>
-                  <AntDesign name="right" size={20} color="white" />
-                </TouchableOpacity>
+                <Link href="./MethodPayment" asChild>
+                  <TouchableOpacity className="flex-1 bg-[#00bdd6] flex-row items-center justify-center p-4 rounded-md my-3">
+                    <Text className="font-pregular text-base text-white text-center">
+                      Next
+                    </Text>
+                    <AntDesign name="right" size={20} color="white" />
+                  </TouchableOpacity>
+                </Link>
               </ScrollView>
             );
           }

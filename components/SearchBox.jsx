@@ -8,6 +8,7 @@ import {
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link } from "expo-router";
 
 const SearchBox = () => {
   return (
@@ -19,9 +20,11 @@ const SearchBox = () => {
           placeholder="Search"
         />
       </View>
-      <TouchableOpacity className="border-[1px] p-2 rounded-sm">
-        <Ionicons name="filter" size={27} color="black" />
-      </TouchableOpacity>
+      <Link href="../details/FilterProduct" asChild>
+        <TouchableOpacity className="border-[1px] p-2 rounded-sm">
+          <Ionicons name="filter" size={27} color="black" />
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 };

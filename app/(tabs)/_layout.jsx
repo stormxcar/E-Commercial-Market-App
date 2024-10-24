@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
+import { Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -41,7 +42,7 @@ const HomeStack = () => (
       component={ProductList}
       options={{ headerShown: true, title: "Product List" }}
     />
-     <Stack.Screen
+    <Stack.Screen
       name="ProductList_2"
       component={ProductList_2}
       options={{ headerShown: true, title: "Product List" }}
@@ -56,7 +57,6 @@ const HomeStack = () => (
       component={Checkout}
       options={{ headerShown: false, title: "Checkout" }}
     />
-
   </Stack.Navigator>
 );
 
@@ -149,16 +149,20 @@ const TabsLayout = () => {
                   <TouchableOpacity style={{ marginRight: 10 }}>
                     <AntDesign name="shoppingcart" size={30} color="black" />
                   </TouchableOpacity>
-                  <Image
-                    source={{ uri: "https://picsum.photos/200" }}
-                    style={{
-                      borderWidth: 2,
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                    }}
-                    resizeMode="contain"
-                  />
+                  <Link href="./account" asChild>
+                    <TouchableOpacity>
+                      <Image
+                        source={{ uri: "https://picsum.photos/200" }}
+                        style={{
+                          borderWidth: 2,
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                        }}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  </Link>
                 </View>
               ),
             })}

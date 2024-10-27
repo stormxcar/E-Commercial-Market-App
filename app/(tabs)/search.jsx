@@ -82,8 +82,8 @@ const Search = () => {
     <SafeAreaView>
       <ScrollView>
         <SearchBox />
-        <View className="px-5">
-          <Text className="font-psemibold text-md py-2">
+        <View className="px-4">
+          <Text className="font-psemibold text-md pt-2">
             Trending search category recently
           </Text>
           <View>
@@ -91,12 +91,12 @@ const Search = () => {
               <View className="flex flex-row w-full py-3">
                 {dataSearchPop.map((item) => (
                   <View
-                    className="flex flex-row items-center bg-gray-300 rounded-md p-4 px-5 mr-4"
+                    className="flex flex-row items-center bg-gray-200 rounded-md p-4 px-5 mr-4"
                     key={item.id}
                   >
                     <Image
                       source={{ uri: item.img }}
-                      className="w-6 h-6 object-cover mr-2 bg-pink-600 rounded-full"
+                      className="w-6 h-6 object-cover mr-2 rounded-full"
                     />
                     <Text>{item.name}</Text>
                   </View>
@@ -105,7 +105,7 @@ const Search = () => {
             </ScrollView>
           </View>
         </View>
-        <View className="px-5 py-3">
+        <View className="px-2 py-3">
           <TouchableOpacity className="w-full rounded-md bg-[#00bdd6] p-4">
             <Text className="font-pmedium text-base text-white text-center">
               Show product
@@ -113,7 +113,7 @@ const Search = () => {
           </TouchableOpacity>
           <View className="py-4 flex flex-row flex-wrap justify-between">
             {dataProduct.map((item) => (
-              <View className=" w-[47%] m-1 " key={item.id}>
+              <View className=" w-[49%] mb-1 " key={item.id}>
                 <ProductCard
                   containerStyles={"w-full"}
                   img={item.img}

@@ -21,10 +21,10 @@ const CategoryCard = ({
   return (
     <View className={`flex-1 ${containerStyles} `}>
       <Link href="../details/ProductDetail_2" asChild>
-        <TouchableOpacity onPress={onPress} className="rounded-lg w-full">
+        <TouchableOpacity onPress={onPress} className="rounded-lg w-full shadow-xl">
           <ImageBackground
             source={{ uri: img }}
-            className="w-full h-[200px] rounded-lg object-cover overflow-hidden"
+            className="w-full h-[200px] rounded-lg object-cover overflow-hidden shadow-2xl"
           >
             {categoryName ? (
               <Text className="font-pregular text-[#00BDD6] text-base pt-10 px-5">

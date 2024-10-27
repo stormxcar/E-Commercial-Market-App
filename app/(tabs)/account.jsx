@@ -75,23 +75,23 @@ const Account = () => {
     <SafeAreaView className="flex-1">
       <ScrollView showsVerticalScrollIndicator={true} className="w-full h-full">
         {/* Header Component */}
-        <View className="px-5 pt-5 py-4 flex flex-row w-full items-center gap-3">
+        <View className="px-3 pt-5 py-4 flex flex-row w-full items-center gap-3">
           <Image
             source={{ uri: "https://picsum.photos/200" }}
             className="w-10 h-10 rounded-full"
           />
           <View>
-            <Text className="text-base font-pmedium">Nguyen Kha</Text>
-            <Text className="text-base font-pregular">Welcome back!</Text>
+            <Text className="text-base font-psemibold">Nguyen Kha</Text>
+            <Text className="text-base font-pregular text-[#00bdd6]">Welcome back!</Text>
           </View>
         </View>
 
         {/* Category Grid */}
-        <View className="flex flex-wrap flex-row justify-between px-5 w-full">
+        <View className="flex flex-wrap flex-row justify-between px-3 w-full">
           {dataCategory.map((item) => (
             <TouchableOpacity
               key={item.id}
-              className="flex flex-col items-center justify-center p-3 w-[94px] border-[1px] border-gray-300 mb-3 mr-3 rounded-lg"
+              className="flex flex-col items-center justify-center p-3 w-[100px] border-[1px] border-gray-300 mb-3 mr-3 rounded-lg"
             >
               <View className="bg-purple-200 rounded-full flex items-center justify-center p-4 mb-3">
                 <Image
@@ -108,7 +108,7 @@ const Account = () => {
         </View>
 
         {/* Recent Orders */}
-        <View className="px-5 py-3">
+        <View className="px-3 py-3">
           <Text className="text-base font-psemibold">Recent Orders</Text>
           <View>
             {recentOrders.map((order, index) => (

@@ -75,7 +75,7 @@ const ProductDetail = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView className="px-5 py-5 flex flex-col">
+      <ScrollView className="px-3 py-5 flex flex-col">
         <View className="w-full h-[200px] rounded-lg">
           <Image
             source={{ uri: "https://picsum.photos/200" }}

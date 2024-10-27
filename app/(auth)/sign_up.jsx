@@ -31,7 +31,7 @@ const SignUp = () => {
     // setIsSubmitting(true);
   };
   return (
-    <SafeAreaView className="h-full bg-white px-8 py-10">
+    <SafeAreaView className="h-full bg-white px-5 py-10">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-4 pt-5">
           <Image source={image_main} className="w-[100px] h-[100px]" />

@@ -41,7 +41,7 @@ const ProductList_2 = () => {
   ];
 
   return (
-    <SafeAreaView className="px-5 py-5">
+    <SafeAreaView className="px-3 py-5">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <View className="flex flex-row w-full items-center justify-between mb-3">

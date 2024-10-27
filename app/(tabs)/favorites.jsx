@@ -51,10 +51,17 @@ const Favorites = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View className="px-5 py-5">
-          <Text className="text-base font-pmedium pb-3">
-            Recommended products
-          </Text>
+        <View className="px-3 py-2">
+          <View className="flex flex-row items-center justify-between pb-3">
+            <Text className="text-base font-psemibold text-gray-600">
+              Recommended products
+            </Text>
+            <TouchableOpacity className="flex flex-row items-center">
+              <Text className="font-pregular text-gray-400">see more</Text>
+              <AntDesign name="right" size={16} color="black" />
+            </TouchableOpacity>
+          </View>
+
           <View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View className="flex flex-row w-full ">
@@ -74,25 +81,26 @@ const Favorites = () => {
           </View>
         </View>
 
-        <View className="px-5">
-          <TouchableOpacity className="w-full p-3 rounded-md bg-white border-[1px] mb-3">
+        <View className="px-3 mt-2">
+          <TouchableOpacity className="w-full p-3 rounded-md bg-white border-[1px] mb-2">
             <Text className="text-base font-psemibold text-center">Filter</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="w-full p-3 rounded-md bg-[#00bdd6]">
-            <Text className="text-base font-psemibold text-center text-white">
+          <TouchableOpacity className=" flex flex-row items-center justify-center p-3 rounded-md bg-[#00bdd6]">
+            <AntDesign name="left" size={20} color="white" />
+            <Text className="text-base font-psemibold text-center text-white ml-2">
               Continue shopping
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="px-5 pt-8 pb-5 flex flex-row justify-between items-center w-full">
-          <Text className="text-base font-pmedium">Your favorites</Text>
+        <View className="px-3 pt-8 pb-3 flex flex-row justify-between items-center w-full">
+          <Text className="text-base font-psemibold text-gray-600">Your favorites</Text>
           <TouchableOpacity className="flex flex-row ">
-            <Text>See all</Text>
-            <AntDesign name="right" size={22} color="black" />
+            <Text className="font-pregular text-sm text-gray-400">See all</Text>
+            <AntDesign name="right" size={22} color="gray" />
           </TouchableOpacity>
         </View>
-        <View className="px-5">
+        <View className="px-3">
           <View>
             {dataProduct.map((item) => (
               <ProductCard

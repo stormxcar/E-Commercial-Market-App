@@ -13,6 +13,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -25,6 +26,7 @@ import ProductList from "../details/ProductList";
 import ProductList_2 from "../details/ProductList_2";
 import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";
+import Cart from "../details/Cart";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,6 +58,16 @@ const HomeStack = () => (
       name="Checkout"
       component={Checkout}
       options={{ headerShown: false, title: "Checkout" }}
+    />
+    <Stack.Screen
+      name="Account"
+      component={Account}
+      options={{ headerShown: false, title: "Account" }}
+    />
+    <Stack.Screen
+      name="Cart"
+      component={Cart}
+      options={{ headerShown: false, title: "Account" }}
     />
   </Stack.Navigator>
 );
@@ -119,6 +131,40 @@ const TabIcon = ({ icon, color, name, focused, size }) => {
   );
 };
 
+const HeaderRight = () => {
+  const navigation = useNavigation(); // Use the useNavigation hook
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        marginRight: 10,
+      }}
+    >
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Cart")}
+        style={{ marginRight: 10 }}
+      >
+        <AntDesign name="shoppingcart" size={30} color="black" />
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Account")}>
+        <Image
+          source={{ uri: "https://picsum.photos/200" }}
+          style={{
+            borderWidth: 2,
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+          }}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const TabsLayout = () => {
   return (
     <KeyboardAvoidingView
@@ -138,37 +184,12 @@ const TabsLayout = () => {
                 borderTopColor: "lightgray",
                 height: 84,
               },
-              headerRight: () => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginRight: 10,
-                  }}
-                >
-                  <TouchableOpacity style={{ marginRight: 10 }}>
-                    <AntDesign name="shoppingcart" size={30} color="black" />
-                  </TouchableOpacity>
-                  <Link href="./account" asChild>
-                    <TouchableOpacity>
-                      <Image
-                        source={{ uri: "https://picsum.photos/200" }}
-                        style={{
-                          borderWidth: 2,
-                          width: 40,
-                          height: 40,
-                          borderRadius: 20,
-                        }}
-                        resizeMode="contain"
-                      />
-                    </TouchableOpacity>
-                  </Link>
-                </View>
-              ),
+
+              headerRight: () => <HeaderRight />,
             })}
           >
             <Tab.Screen
-              name="HomeTab"
+              name="Home"
               component={HomeStack}
               options={{
                 tarBarLabel: "home",
@@ -184,7 +205,7 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="SearchTab"
+              name="Search"
               component={SearchStack}
               options={{
                 tarBarLabel: "Search",
@@ -200,7 +221,7 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="FavoritesTab"
+              name="Favorites"
               component={FavoritesStack}
               options={{
                 tarBarLabel: "Favorites",
@@ -216,7 +237,7 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="InboxTab"
+              name="Inbox"
               component={InboxStack}
               options={{
                 tarBarLabel: "Inbox",
@@ -232,7 +253,7 @@ const TabsLayout = () => {
               }}
             />
             <Tab.Screen
-              name="AccountTab"
+              name="Account"
               component={AccountStack}
               options={{
                 tarBarLabel: "Account",

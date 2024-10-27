@@ -80,7 +80,7 @@ const Inbox = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View className="px-5">
+      <View className="px-3">
         <Text className="text-base font-pmedium">Messages</Text>
         <View>
           <FlatList

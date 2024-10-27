@@ -6,9 +6,9 @@ const CategorySelect = ({ img, categoryName, containerStyles }) => {
   return (
     <Link href="details/ProductList_2" asChild>
       <TouchableOpacity
-        className={`flex flex-col items-center justify-center pr-3 gap-3 ${containerStyles}`}
+        className={`flex flex-col items-center justify-center pr-3 ${containerStyles}`}
       >
-        <View className="bg-purple-100 rounded-full flex items-center justify-center p-4 ">
+        <View className="bg-purple-100 rounded-full flex items-center justify-center p-4 mb-2">
           <Image
             className="w-10 h-10 m-2"
             source={{ uri: img }}
@@ -16,7 +16,9 @@ const CategorySelect = ({ img, categoryName, containerStyles }) => {
           />
         </View>
 
-        <Text className="font-pregular text-base">{categoryName}</Text>
+        <Text className="font-pregular text-xs break-words">
+          {categoryName}
+        </Text>
       </TouchableOpacity>
     </Link>
   );

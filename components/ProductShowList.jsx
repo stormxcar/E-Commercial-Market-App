@@ -40,7 +40,7 @@ const ProductList = () => {
   ];
 
   return (
-    <SafeAreaView className="px-5 py-5">
+    <SafeAreaView className="px-3 py-5">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full h-[200px] rounded-lg">
           <Image

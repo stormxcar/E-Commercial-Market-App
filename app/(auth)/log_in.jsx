@@ -33,12 +33,12 @@ const LogIn = () => {
     // setIsSubmitting(true);
   };
   return (
-    <SafeAreaView className="h-full bg-white px-8">
+    <SafeAreaView className="h-full bg-white px-5">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="w-full flex-1 flex-col items-center justify-center bg-white gap-2">
           <TouchableOpacity className="w-full items-center pt-20">
             <Image
-              resizeMode="contain"
+              resizeMode="cover"
               source={image_main}
               className="w-[100px] h-[100px]"
             />
@@ -61,12 +61,13 @@ const LogIn = () => {
         <FormField
           title="Password"
           placeholder={"**********"}
+          // secureTextEntry={true}
           value={form.password}
           handleChangeText={(e) => setForm({ ...form, password: e })}
           otherStyles="mt-7"
         />
 
-        <View className=" p-0 flex justify-start items-center flex-row">
+        <View className="items-center justify-start flex-row">
           <CheckBox
             checked={isChecked}
             onPress={() => setIsChecked(!isChecked)}
@@ -83,7 +84,7 @@ const LogIn = () => {
 
         <View className="flex-1 items-center justify-center pt-5">
           <View className="relative w-full items-center">
-            <View className="absolute w-full h-[1px] bg-gray-500 top-1/2" />
+            <View className="absolute w-full h-[1px] bg-gray-200 top-1/2" />
             <Text className="font-plight bg-white px-2">OR</Text>
           </View>
         </View>
@@ -91,14 +92,14 @@ const LogIn = () => {
         <View className="w-full flex-1 flex-row items-center justify-between">
           <CustomButton
             handlePress={submit}
-            containerStyles="mt-7 flex-1 mr-2"
+            containerStyles="mt-7 flex-1 mr-2 bg-white border-[1px] border-gray-200"
             isLoading={isSubmitting}
           >
             <Icon name="facebook" size={24} color="blue" />
           </CustomButton>
           <CustomButton
             handlePress={submit}
-            containerStyles="mt-7 flex-1 mr-2"
+            containerStyles="mt-7 flex-1 mr-2 bg-white border-[1px] border-red-200"
             isLoading={isSubmitting}
           >
             <Icon name="google" size={24} color="red" />
@@ -106,7 +107,7 @@ const LogIn = () => {
 
           <CustomButton
             handlePress={submit}
-            containerStyles="mt-7 flex-1"
+            containerStyles="mt-7 flex-1 bg-white border-[1px] border-black"
             isLoading={isSubmitting}
           >
             <Icon name="apple" size={24} color="black" />

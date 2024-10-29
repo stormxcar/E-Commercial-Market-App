@@ -22,7 +22,7 @@ import Search from "./search";
 import Favorites from "./favorites";
 import Inbox from "./inbox";
 import Account from "./account";
-import ProductList from "../details/ProductList";
+import ProductList from "../details/productList";
 import ProductList_2 from "../details/ProductList_2";
 import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";

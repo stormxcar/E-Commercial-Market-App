@@ -8,12 +8,8 @@ const CategorySelect = ({ img, categoryName, containerStyles }) => {
       <TouchableOpacity
         className={`flex flex-col items-center justify-center pr-3 ${containerStyles}`}
       >
-        <View className="bg-purple-100 rounded-full flex items-center justify-center p-4 mb-2">
-          <Image
-            className="w-10 h-10 m-2"
-            source={{ uri: img }}
-            resizeMode="contain"
-          />
+        <View className="bg-purple-100 rounded-full flex items-center justify-center p-2 mb-2">
+          <Image className="w-10 h-10 m-2" source={img} resizeMode="contain" />
         </View>
 
         <Text className="font-pregular text-xs break-words">

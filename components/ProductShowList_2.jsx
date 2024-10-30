@@ -11,35 +11,35 @@ import React, { useState } from "react";
 import CardList from "./CardList";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-const ProductList_2 = () => {
+
+const ProductShowList_2 = () => {
   const dataProductCard = [
     {
       id: 1,
-      name: "Product 1",
-      img: "https://picsum.photos/200",
-      price: "$100",
+      name: "Smart Phone",
+      img: require("../assets/images/iphone15.png"),
+      price: "$899",
     },
     {
       id: 2,
-      name: "Product 2",
-      img: "https://picsum.photos/200",
-      price: "$200",
+      name: "Smart Phone",
+      img: require("../assets/images/samsung.png"),
+      price: "$899",
     },
     {
       id: 3,
-      name: "Product 3",
-      img: "https://picsum.photos/200",
-      price: "$300",
+      name: "Smart Phone",
+      img: require("../assets/images/realme.png"),
+      price: "$789",
     },
     {
       id: 4,
-      name: "Product 4",
-      img: "https://picsum.photos/200",
-      price: "$400",
+      name: "Smart Phone",
+      img: require("../assets/images/oppoA17.png"),
+      price: "$999",
     },
     // Add more products as needed
   ];
-
   return (
     <SafeAreaView className="px-3 py-5">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -56,21 +56,21 @@ const ProductList_2 = () => {
         </View>
         <View className="flex flex-row justify-between items-centerw-full h-[100px]">
           <Image
-            source={{ uri: "https://picsum.photos/200" }}
+            source= {require("../assets/images/phone.png")}
             className="w-[30%] h-[100px] rounded-lg overflow-hidden mr-3"
             width={30}
             height={30}
             resizeMode="cover"
           />
           <Image
-            source={{ uri: "https://picsum.photos/200" }}
+            source={require("../assets/images/iPad.png")}
             className="w-[30%] h-[100px] rounded-lg overflow-hidden mr-3"
             width={30}
             height={30}
             resizeMode="cover"
           />
           <Image
-            source={{ uri: "https://picsum.photos/200" }}
+            source={require("../assets/images/laptop.png")}
             className="w-[30%] h-[100px] rounded-lg overflow-hidden"
             width={30}
             height={30}
@@ -116,9 +116,9 @@ const ProductList_2 = () => {
           </View>
         </View>
 
-        <View className="w-full h-[200px] rounded-lg">
+        <View className="w-full h-[250] rounded-lg">
           <Image
-            source={{ uri: "https://picsum.photos/200" }}
+            source={require("../assets/images/phone_ipad.png")}
             className="w-full h-full rounded-lg overflow-hidden"
             width={30}
             height={30}
@@ -130,6 +130,6 @@ const ProductList_2 = () => {
   );
 };
 
-export default ProductList_2;
+export default ProductShowList_2;
 
 const styles = StyleSheet.create({});

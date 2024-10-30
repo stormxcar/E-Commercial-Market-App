@@ -9,7 +9,7 @@ const CardList = ({ ratingChanged, containerStyles, img, name, price , imageStyl
     <TouchableOpacity className={` ${containerStyles} bg-gray-200 rounded-lg`}>
       <View>
         <Image
-          source={{ uri: img }}
+          source={img}
           className={`object-cover overflow-hidden rounded-lg border-2 ${imageStyles}`}
         />
       </View>

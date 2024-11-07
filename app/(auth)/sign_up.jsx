@@ -17,7 +17,7 @@ import { CheckBox } from "react-native-elements";
 const SignUp = () => {
   const [form, setForm] = useState({
     username: "",
-    email: " ",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -27,6 +27,29 @@ const SignUp = () => {
     if (form.email === "" || form.password === "" || form.username === "") {
       Alert.alert("Error", "Please fill in all fields");
       return;
+    }
+    else {
+      // Gửi request lên server
+      fetch('https://6457b6671a4c152cf9887b69.mockapi.io/api/vd1/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+      })
+      .then(response => {
+        if (!response.ok) {
+          // Xử lý lỗi
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Xử lý dữ liệu trả về từ server
+        console.log('Đăng ký thành công:', data);
+      })
+      .catch(error => {
+        console.error('Lỗi khi đăng ký:', error);
+      });
     }
     // setIsSubmitting(true);
   };

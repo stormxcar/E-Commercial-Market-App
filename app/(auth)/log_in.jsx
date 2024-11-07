@@ -19,18 +19,35 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const LogIn = () => {
   const [form, setForm] = useState({
-    email: " ",
+    email: "",
     password: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const submit = () => {
+  const submit = (form) => {
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
     // setIsSubmitting(true);
+    fetch('https://6457b6671a4c152cf9887b69.mockapi.io/api/vd1/user', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setIsSubmitting(false);
+      if (data.email === form.email && data.password === form.password) {
+        console.log('đăng nhập thành công') 
+      }
+      else {
+        console.log('đăng nhập thất bại')
+      }
+    });
   };
   return (
     <SafeAreaView className="h-full bg-white px-5">
@@ -77,7 +94,7 @@ const LogIn = () => {
 
         <CustomButton
           title="Sign In"
-          handlePress={submit}
+          handlePress={submit(form)}
           containerStyles="mt-1"
           isLoading={isSubmitting}
         />

@@ -42,7 +42,8 @@ const LogIn = () => {
     .then((data) => {
       setIsSubmitting(false);
       if (data.email === form.email && data.password === form.password) {
-        console.log('đăng nhập thành công') 
+        Alert.alert("Đăng nhập thành công")
+        router.push("/home");
       }
       else {
         console.log('đăng nhập thất bại')
@@ -94,7 +95,7 @@ const LogIn = () => {
 
         <CustomButton
           title="Sign In"
-          handlePress={submit(form)}
+          handlePress={() => submit(form)}
           containerStyles="mt-1"
           isLoading={isSubmitting}
         />

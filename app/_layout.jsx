@@ -86,7 +86,7 @@ const RootLayout = () => {
           ),
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="details/ProductDetail_2"
         options={{
           title: "Detail",
@@ -108,7 +108,7 @@ const RootLayout = () => {
           ),
         }}
       />
-      
+      <Stack.Screen name="(tabs)/search" options={{ headerShown: false }} />
     </Stack>
   );
 };

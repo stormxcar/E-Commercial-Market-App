@@ -10,10 +10,8 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { Tabs } from "expo-router";
-import { Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -22,7 +20,7 @@ import Search from "./search";
 import Favorites from "./favorites";
 import Inbox from "./inbox";
 import Account from "./account";
-import ProductList from "../details/productList";
+import ProductList from "../details/ProductList";
 import ProductList_2 from "../details/ProductList_2";
 import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";

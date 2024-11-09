@@ -84,7 +84,7 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1 bg-white py-3">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <SearchBox />
+        <SearchBox onFocus={() => navigation.navigate("SearchScreen")} />
 
         <Text className="font-psemibold text-base ml-3 text-gray-400 pb-2">
           Category

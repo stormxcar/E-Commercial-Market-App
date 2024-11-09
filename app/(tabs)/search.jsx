@@ -17,34 +17,34 @@ const Search = () => {
     {
       id: 1,
       name: "Clothing",
-      img: "https://picsum.photos/200",
+      img: require("../../assets/images/product_cloth.png"),
     },
     {
       id: 2,
       name: "Shoes",
-      img: "https://picsum.photos/200",
+      img: require("../../assets/images/product_shoe.png"),
     },
     {
       id: 3,
       name: "Tech",
-      img: "https://picsum.photos/200",
+      img: require("../../assets/images/product_tablet.png"),
     },
     {
       id: 4,
       name: "Musician",
-      img: "https://picsum.photos/200",
+      img: require("../../assets/images/product_cloth.png"),
     },
     {
       id: 5,
       name: "Food",
-      img: "https://picsum.photos/200",
+      img: require("../../assets/images/product_fruit.png"),
     },
   ];
 
   const dataProduct = [
     {
       id: 1,
-      img: "https://picsum.photos/200",
+      img: require("../../assets/images/product_shoe.png"),
       name: "Product1",
       countReviews: "10",
       price: "100",
@@ -87,15 +87,19 @@ const Search = () => {
             Trending search category recently
           </Text>
           <View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 4 }}
+            >
               <View className="flex flex-row w-full py-3">
                 {dataSearchPop.map((item) => (
                   <View
-                    className="flex flex-row items-center bg-gray-200 rounded-md p-4 px-5 mr-4"
+                    className="flex flex-row items-center bg-gray-200 rounded-md p-4 px-5 mr-4 shadow-sm"
                     key={item.id}
                   >
                     <Image
-                      source={{ uri: item.img }}
+                      source={item.img}
                       className="w-6 h-6 object-cover mr-2 rounded-full"
                     />
                     <Text>{item.name}</Text>

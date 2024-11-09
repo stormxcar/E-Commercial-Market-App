@@ -30,24 +30,28 @@ const LogIn = () => {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
-    // setIsSubmitting(true);
-    fetch('https://6457b6671a4c152cf9887b69.mockapi.io/api/vd1/user', {
-      method: 'POST',
+    setIsSubmitting(true);
+    fetch("https://6457b6671a4c152cf9887b69.mockapi.io/api/vd1/user", {
+      method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setIsSubmitting(false);
-      if (data.email === form.email && data.password === form.password) {
-        console.log('đăng nhập thành công') 
-      }
-      else {
-        console.log('đăng nhập thất bại')
-      }
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        setIsSubmitting(false);
+        if (data.email === form.email && data.password === form.password) {
+          Alert.alert("Success","đăng nhập thành công");
+          router.push("/home");        
+        } else {
+          console.log("đăng nhập thất bại");
+        }
+      })
+      .catch((error) => {
+        setIsSubmitting(false);
+        console.error("Error:", error);
+      });
   };
   return (
     <SafeAreaView className="h-full bg-white px-5">
@@ -94,7 +98,7 @@ const LogIn = () => {
 
         <CustomButton
           title="Sign In"
-          handlePress={submit(form)}
+          handlePress={() => submit(form)}
           containerStyles="mt-1"
           isLoading={isSubmitting}
         />

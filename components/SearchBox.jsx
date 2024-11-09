@@ -1,15 +1,16 @@
 import {
-  StyleSheet,
   View,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
-const SearchBox = () => {
+const SearchBox = ({onFocus}) => {
+  const router = useRouter();
   return (
     <View className="bg-white px-3 py-4 items-center flex flex-row justify-between w-full relative ">
       <View className=" bg-gray-100 flex-1 flex-row items-center border-[1px] rounded-sm p-2 mr-2">
@@ -17,6 +18,7 @@ const SearchBox = () => {
         <TextInput
           className="flex-1 pl-2 text-black font-pregular text-base"
           placeholder="Search"
+          onFocus={onFocus}
         />
       </View>
       <Link href="../details/FilterProduct" asChild>

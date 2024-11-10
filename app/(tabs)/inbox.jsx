@@ -5,9 +5,10 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
+  ScrollView,
+  RefreshControl
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchBox from "../../components/SearchBox";
 import MessageNotify from "../../components/MessageNotify";
 
@@ -35,29 +36,60 @@ const Inbox = () => {
     },
   ];
 
-  const dataMessage = [
-    {
-      id: 1,
-      name: "Product 1",
-      status: "new message",
-      img: "https://picsum.photos/200",
-      time: "10:00",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      status: "new message",
-      img: "https://picsum.photos/200",
-      time: "10:00",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      status: "new message",
-      img: "https://picsum.photos/200",
-      time: "10:00",
-    },
-  ];
+  // const dataMessage = [
+  //   {
+  //     id: 1,
+  //     name: "Product 1",
+  //     status: "new message",
+  //     img: "https://picsum.photos/200",
+  //     time: "10:00",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Product 2",
+  //     status: "new message",
+  //     img: "https://picsum.photos/200",
+  //     time: "10:00",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Product 3",
+  //     status: "new message",
+  //     img: "https://picsum.photos/200",
+  //     time: "10:00",
+  //   },
+  // ];
+  const [dataMessage, setDataMessage] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbyx5-e6QF94rs-LLpmDKL_5lHMMOlEddxC1ObmB3AwGlwdez-f0idyz4S7nSHoutjsTOQ/exec"
+      );
+      const data = await res.json();
+      // Lọc ra dữ liệu của sheet 'inbox' từ JSON trả về
+      setDataMessage(data.inbox || []);
+    } catch (error) {
+      console.error(error);
+      setDataInbox([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <SafeAreaView>
       <SearchBox />
@@ -65,7 +97,7 @@ const Inbox = () => {
         {dataCategory.map((item) => (
           <TouchableOpacity
             key={item.id}
-            className="flex flex-col items-center py-3 w-[50px] mb-3 mr-3 rounded-lg"
+            className="flex flex-col items-center pt-3 w-[50px] mb-1 mr-3 rounded-lg"
           >
             <View className="bg-purple-200 rounded-full flex p-4 mb-3">
               <Image
@@ -80,26 +112,27 @@ const Inbox = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View className="px-3">
-        <Text className="text-base font-pmedium">Messages</Text>
+      <Text className="px-3 pb-3 text-base font-pmedium">Messages</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={true}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        className="px-3 h-[350px]"
+      >
+       
         <View>
-          <FlatList
-            data={dataMessage}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-              return (
-                <MessageNotify
-                  nameFrom={item.name}
-                  img={item.img}
-                  status={item.status}
-                  time={item.time}
-                />
-              );
-            }}
-            className="pt-3"
-          />
+          {dataMessage.map((item) => (
+            <MessageNotify
+              key={item.id}
+              nameFrom={item.name}
+              img={item.img}
+              status={item.status}
+              time={item.time}
+            />
+          ))}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

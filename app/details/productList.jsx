@@ -15,7 +15,7 @@ const ProductList = () => {
           if (item.key === "header") {
             return <></>;
           } else {
-            return <ProductShowList />;
+            return <ProductShowList sheetName="inbox" />;
           }
         }}
       />

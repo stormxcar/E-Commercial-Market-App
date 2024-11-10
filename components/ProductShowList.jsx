@@ -6,42 +6,59 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  RefreshControl,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CardList from "./CardList";
 
+// Accept `sheetName` as a prop with a default value of "product"
 const ProductList = () => {
-  const dataProductCard = [
-    {
-      id: 1,
-      name: "Product 1",
-      img: "https://picsum.photos/200",
-      price: "$100",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      img: "https://picsum.photos/200",
-      price: "$200",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      img: "https://picsum.photos/200",
-      price: "$300",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      img: "https://picsum.photos/200",
-      price: "$400",
-    },
-    // Add more products as needed
-  ];
+  const [dataProductCard, setDataProductCard] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch data from the specified sheet
+  const getData = async () => {
+    try {
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbyx5-e6QF94rs-LLpmDKL_5lHMMOlEddxC1ObmB3AwGlwdez-f0idyz4S7nSHoutjsTOQ/exec"
+      );
+      const data = await res.json();
+      setDataProductCard(data.product || []);
+    } catch (error) {
+      console.log(error);
+      setDataProductCard([]);
+    }
+  };
+
+  // Fetch data when the component mounts or when `sheetName` changes
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // Refresh data when the user pulls down to refresh
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setLoading(true);
+    await getData(sheetName);
+    setRefreshing(false);
+    setLoading(false);
+  };
 
   return (
     <SafeAreaView className="px-3 py-5">
-      <ScrollView showsVerticalScrollIndicator={false}>
+      {loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#00bdd6" />
+        </View>
+      )}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View className="w-full h-[200px] rounded-lg">
           <Image
             source={{ uri: "https://picsum.photos/200" }}
@@ -60,7 +77,7 @@ const ProductList = () => {
               </Text>
             </TouchableOpacity>
             <View className="py-4 flex flex-row flex-wrap justify-between">
-              {dataProductCard.map((item) => (
+              {Array.isArray(dataProductCard) && dataProductCard.map((item) => (
                 <View className="w-[47%] m-1" key={item.id}>
                   <CardList
                     containerStyles={"w-full"}
@@ -84,9 +101,11 @@ const ProductList = () => {
 
         <View>
           <View>
-            <Text className="text-base font-pmedium mt-3">Relevant products</Text>
+            <Text className="text-base font-pmedium mt-3">
+              Relevant products
+            </Text>
             <View className="py-4 flex flex-row flex-wrap justify-between">
-              {dataProductCard.map((item) => (
+              {Array.isArray(dataProductCard) && dataProductCard.map((item) => (
                 <View className="w-full mb-2" key={item.id}>
                   <CardList
                     containerStyles={"w-full flex flex-row items-center"}
@@ -107,4 +126,12 @@ const ProductList = () => {
 
 export default ProductList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  loading: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+    zIndex: 1,
+  },
+});

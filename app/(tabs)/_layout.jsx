@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import {useNavigation } from "@react-navigation/native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -25,6 +26,8 @@ import ProductList_2 from "../details/ProductList_2";
 import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";
 import Cart from "../details/Cart";
+import ChatScreen from "../details/ChatScreen";
+import { Link } from "expo-router";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -66,6 +69,11 @@ const HomeStack = () => (
       name="Cart"
       component={Cart}
       options={{ headerShown: false, title: "Account" }}
+    />
+    <Stack.Screen
+      name="ChatScreen"
+      component={ChatScreen}
+      options={{ headerShown: false, title: "Chat" }}
     />
   </Stack.Navigator>
 );
@@ -121,8 +129,14 @@ const AccountStack = () => (
 const TabIcon = ({ icon, color, name, focused, size }) => {
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <AntDesign name={icon} size={size} color={focused ? "#f00" : color} />
-      <Text style={{ fontSize: 10, color: focused ? "#f00" : color }}>
+      <AntDesign name={icon} size={size} color={focused ? "#00bdd6" : color} />
+      <Text
+        style={{
+          fontSize: 10,
+          fontWeight: "600",
+          color: focused ? "#00bdd6" : color,
+        }}
+      >
         {name}
       </Text>
     </View>
@@ -140,6 +154,9 @@ const HeaderRight = () => {
         marginRight: 10,
       }}
     >
+      <TouchableOpacity>
+        <MaterialIcons name="notifications-none" size={32} color="black" />
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate("Cart")}
         style={{ marginRight: 10 }}
@@ -172,7 +189,7 @@ const TabsLayout = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ flex: 1 }}>
           <Tab.Navigator
-            screenOptions={({ route }) => ({
+            screenOptions={() => ({
               tabBarShowLabel: false,
               tabBarActiveTintColor: "#FFA001",
               tabBarInactiveTintColor: "#CDCDE0",
@@ -272,12 +289,11 @@ const TabsLayout = () => {
                       marginRight: 10,
                     }}
                   >
-                    <TouchableOpacity style={{ marginRight: 10 }}>
-                      <AntDesign name="setting" size={24} color="black" />
-                    </TouchableOpacity>
-                    <Text style={{ fontWeight: "600", fontSize: 16 }}>
-                      Settings
-                    </Text>
+                    <Link href="/details/Settings" asChild>
+                      <TouchableOpacity>
+                        <AntDesign name="setting" size={24} color="black" />
+                      </TouchableOpacity>
+                    </Link>
                   </View>
                 ),
               }}

@@ -5,12 +5,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-  FlatList,
   Image,
+  RefreshControl,
+  ActivityIndicator
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import SearchBox from "../../components/SearchBox";
 import ProductCard from "../../components/ProductCard";
+import CategorySelect from "../../components/CategorySelect";
 
 const Search = () => {
   const dataSearchPop = [
@@ -40,7 +42,32 @@ const Search = () => {
       img: require("../../assets/images/product_fruit.png"),
     },
   ];
-
+  const dataCategory = [
+    {
+      id: 1,
+      img: require("../../assets/images/category_phone.png"),
+      categoryName: "Electronics",
+      discount: "10%",
+    },
+    {
+      id: 2,
+      img: require("../../assets/images/category_shoe.png"),
+      categoryName: "Fashion",
+      discount: "20%",
+    },
+    {
+      id: 3,
+      img: require("../../assets/images/category_beauty.png"),
+      categoryName: "Beauty",
+      discount: "30%",
+    },
+    {
+      id: 4,
+      img: require("../../assets/images/category_fruit.png"),
+      categoryName: "Fresh Fruits",
+      discount: "40%",
+    },
+  ];
   const dataProduct = [
     {
       id: 1,
@@ -78,9 +105,20 @@ const Search = () => {
       price: "100",
     },
   ];
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} />}
+        showsVerticalScrollIndicator={false}
+        onRefresh={onRefresh}
+      >
         <SearchBox />
         <View className="px-4">
           <Text className="font-psemibold text-md pt-2">
@@ -93,17 +131,17 @@ const Search = () => {
               contentContainerStyle={{ paddingHorizontal: 4 }}
             >
               <View className="flex flex-row w-full py-3">
-                {dataSearchPop.map((item) => (
-                  <View
-                    className="flex flex-row items-center bg-gray-200 rounded-md p-4 px-5 mr-4 shadow-sm"
+                {dataCategory.map((item) => (
+                  <CategorySelect
                     key={item.id}
-                  >
-                    <Image
-                      source={item.img}
-                      className="w-6 h-6 object-cover mr-2 rounded-full"
-                    />
-                    <Text>{item.name}</Text>
-                  </View>
+                    img={item.img}
+                    categoryName={item.categoryName}
+                    containerStyles={(className = "w-[150px]")}
+                    containerStylesImg={
+                      (className =
+                        "w-full rounded-sm shadow-sm border-[1px] border-gray-200")
+                    }
+                  />
                 ))}
               </View>
             </ScrollView>

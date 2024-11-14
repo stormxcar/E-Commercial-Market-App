@@ -5,14 +5,15 @@ import {
   TouchableOpacity,
   Text,
   View,
+  RefreshControl,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SearchBox from "../../components/SearchBox";
 import CategorySelect from "../../components/CategorySelect";
 import CategoryCard from "../../components/CategoryCard";
 import CustomButton from "../../components/CustomButton";
 import ProductCard from "../../components/ProductCard";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -24,6 +25,8 @@ const Stack = createNativeStackNavigator();
 
 const Home = () => {
   const navigation = useNavigation();
+  const [refreshing, setRefreshing] = useState(false);
+
   const dataCategory = [
     {
       id: 1,
@@ -81,9 +84,19 @@ const Home = () => {
       price: "100",
     },
   ];
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
   return (
     <SafeAreaView className="flex-1 bg-white py-3">
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing}/>}
+        showsVerticalScrollIndicator={false}
+        onRefresh={onRefresh}
+      >
         <SearchBox onFocus={() => navigation.navigate("SearchScreen")} />
 
         <Text className="font-psemibold text-base ml-3 text-gray-400 pb-2">
@@ -97,7 +110,9 @@ const Home = () => {
               <CategorySelect
                 img={item.img}
                 categoryName={item.categoryName}
-                containerStyles={(className = "")}
+                containerStylesImg={
+                  (className = "rounded-full bg-purple-100 shadow-sm")
+                }
               />
             );
           }}
@@ -115,7 +130,11 @@ const Home = () => {
             img="https://picsum.photos/200"
             discount="10%"
             CustomButton={() => (
-              <CustomButton title="Buy now" containerStyles="w-[100px]" />
+              <CustomButton
+                title="Buy now"
+                containerStyles="w-[100px]"
+                handlePress={() => router.push("../details/Cart")}
+              />
             )}
           />
           <View className="flex flex-row items-center justify-between w-full mt-3">
@@ -129,17 +148,19 @@ const Home = () => {
             />
           </View>
           <View className="flex items-center justify-center mt-3">
-            <TouchableOpacity className="p-2 bg-[#00bdd6] rounded-md">
-              <Text className="text-white font-pmedium text-base">
-                See more
-              </Text>
-            </TouchableOpacity>
+            <Link href="../details/ProductList" asChild>
+              <TouchableOpacity className="p-2 bg-[#00bdd6] rounded-md">
+                <Text className="text-white font-pmedium text-base">
+                  See more
+                </Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
 
         <View className="flex-1 px-2 pb-4">
           <View className="flex flex-row items-center justify-between w-full mb-2">
-            <Text className="text-base font-psemibold text-gray-300">
+            <Text className="text-base font-psemibold text-gray-400">
               Recommended for you
             </Text>
             <Link href="../details/ProductList" asChild>

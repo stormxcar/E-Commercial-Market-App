@@ -5,12 +5,23 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { CheckBox } from "react-native-elements";
 import Slider from "@react-native-community/slider";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const FilterProduct = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { name } = route.params;
+
+  useEffect(() => {
+    if (name) {
+      navigation.setOptions({ title: name });
+    }
+  }, [name]);
+
   const [isChecked, setIsChecked] = useState(false);
   const [price, setPrice] = useState(500); // Default value for the slider
 

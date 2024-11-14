@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 
 const ProductCard = ({ img, name, countReviews, price, containerStyles }) => {
   return (
-    <Link href="details/productDetail" asChild>
+    <Link href={{pathname: "details/productDetail", params: {name} }} asChild>
       <TouchableOpacity
         className={`bg-gray-200 ${containerStyles} py-3 mr-2 rounded-lg`}
       >
@@ -24,6 +24,7 @@ const ProductCard = ({ img, name, countReviews, price, containerStyles }) => {
           </View>
           <Text className="text-base font-pregular">${price}</Text>
         </View>
+        <Text className="py-2 text-sm font-pregular px-3">Sold out: 2999</Text>
       </TouchableOpacity>
     </Link>
   );

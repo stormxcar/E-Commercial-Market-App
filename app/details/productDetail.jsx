@@ -6,12 +6,21 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import React from "react";
-import HeaderShown from "../../components/headerShown";
+import React, {useEffect} from "react";
 import ProductShowDetail from "../../components/ProductShowDetail";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ProductDetail = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { name } = route.params;
   const data = [{ key: "header" }, { key: "content" }];
+
+  useEffect(() => {
+    if (name) {
+      navigation.setOptions({ title: name });
+    }
+  }, [name]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

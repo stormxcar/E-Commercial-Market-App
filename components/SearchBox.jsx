@@ -21,7 +21,7 @@ const SearchBox = ({onFocus}) => {
           onFocus={onFocus}
         />
       </View>
-      <Link href="../details/FilterProduct" asChild>
+      <Link  href={{pathname: "../details/FilterProduct", params: {name : "Filter"} }} asChild>
         <TouchableOpacity className="border-[1px] p-[9px] rounded-sm">
           <Ionicons name="filter" size={24} color="black" />
         </TouchableOpacity>

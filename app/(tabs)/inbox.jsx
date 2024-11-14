@@ -6,11 +6,13 @@ import {
   Text,
   View,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import SearchBox from "../../components/SearchBox";
 import MessageNotify from "../../components/MessageNotify";
+import { API_DATA } from "../../constants/data";
 
 const Inbox = () => {
   const dataCategory = [
@@ -66,9 +68,7 @@ const Inbox = () => {
   const getData = async () => {
     try {
       setLoading(true);
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbyx5-e6QF94rs-LLpmDKL_5lHMMOlEddxC1ObmB3AwGlwdez-f0idyz4S7nSHoutjsTOQ/exec"
-      );
+      const res = await fetch(API_DATA);
       const data = await res.json();
       // Lọc ra dữ liệu của sheet 'inbox' từ JSON trả về
       setDataMessage(data.inbox || []);
@@ -120,8 +120,12 @@ const Inbox = () => {
         }
         className="px-3 h-[350px]"
       >
-       
         <View>
+        {loading && (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color="#00bdd6" />
+            </View>
+          )}
           {dataMessage.map((item) => (
             <MessageNotify
               key={item.id}

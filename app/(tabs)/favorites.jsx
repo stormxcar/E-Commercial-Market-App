@@ -5,10 +5,12 @@ import {
   Text,
   View,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import ProductCard from "../../components/ProductCard";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { Link } from "expo-router";
 
 const Favorites = () => {
   const dataProduct = [
@@ -48,9 +50,19 @@ const Favorites = () => {
       price: "100",
     },
   ];
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} />}
+        showsVerticalScrollIndicator={false}
+        onRefresh={onRefresh}
+      >
         <View className="px-3 py-2">
           <View className="flex flex-row items-center justify-between pb-3">
             <Text className="text-base font-psemibold text-gray-600">
@@ -82,19 +94,28 @@ const Favorites = () => {
         </View>
 
         <View className="px-3 mt-2">
-          <TouchableOpacity className="w-full p-3 rounded-md bg-white border-[1px] mb-2">
-            <Text className="text-base font-psemibold text-center">Filter</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className=" flex flex-row items-center justify-center p-3 rounded-md bg-[#00bdd6]">
-            <AntDesign name="left" size={20} color="white" />
-            <Text className="text-base font-psemibold text-center text-white ml-2">
-              Continue shopping
-            </Text>
-          </TouchableOpacity>
+          <Link href="/details/FilterProduct" asChild>
+            <TouchableOpacity className="w-full p-3 rounded-md bg-white border-[1px] mb-2">
+              <Text className="text-base font-psemibold text-center">
+                Filter
+              </Text>
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/details/ProductList" asChild>
+            <TouchableOpacity className=" flex flex-row items-center justify-center p-3 rounded-md bg-[#00bdd6]">
+              <AntDesign name="left" size={20} color="white" />
+              <Text className="text-base font-psemibold text-center text-white ml-2">
+                Continue shopping
+              </Text>
+            </TouchableOpacity>
+          </Link>
         </View>
 
         <View className="px-3 pt-8 pb-3 flex flex-row justify-between items-center w-full">
-          <Text className="text-base font-psemibold text-gray-600">Your favorites</Text>
+          <Text className="text-base font-psemibold text-gray-600">
+            Your favorites
+          </Text>
           <TouchableOpacity className="flex flex-row ">
             <Text className="font-pregular text-sm text-gray-400">See all</Text>
             <AntDesign name="right" size={22} color="gray" />

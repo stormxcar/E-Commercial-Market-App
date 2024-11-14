@@ -9,11 +9,13 @@ import {
   ScrollView,
   Switch,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProductCard from "./ProductCard";
 import { Link } from "expo-router";
+import Toast from "react-native-toast-message";
+import Modal from "react-native-modal";
 
 const ProgressBar = ({ percentage, label }) => {
   return (
@@ -30,7 +32,18 @@ const ProgressBar = ({ percentage, label }) => {
   );
 };
 
+// Tạo component Toast mới sử dụng React.forwardRef
+const ForwardedToast = forwardRef((props, ref) => (
+  <Toast {...props} ref={ref} />
+));
+
 const ProductDetail = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const dataProduct = [
     {
       id: 1,
@@ -71,7 +84,14 @@ const ProductDetail = () => {
 
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+    Toast.show({
+      type: "success",
+      text1: "Cảm ơn bạn đã quan tâm về sản phẩm của chúng tôi.",
+      text2: "Mọi cập nhật mới nhất về đơn hàng sẽ được thông báo đến bạn.",
+    });
+  };
 
   return (
     <SafeAreaView>
@@ -107,7 +127,7 @@ const ProductDetail = () => {
           </Text>
         </View>
 
-        <View className="flex flex-row justify-between flex-wrap w-full my-8 py-3">
+        <View className="flex flex-row justify-between flex-wrap w-full mt-8 py-3">
           <View className="flex flex-row items-center gap-2 w-[50%]">
             <AntDesign name="creditcard" size={24} color="#00BDD6" />
             <Text className="text-base font-pregular">Payment</Text>
@@ -123,6 +143,93 @@ const ProductDetail = () => {
           <View className="flex flex-row items-center gap-2 w-[50%]">
             <AntDesign name="creditcard" size={24} color="#00BDD6" />
             <Text className="text-base font-pregular">Payment</Text>
+          </View>
+        </View>
+
+        <View>
+          <TouchableOpacity
+            className="flex flex-row justify-between items-center mb-3 border-b-[1px] border-gray-300 py-3"
+            onPress={toggleModal}
+          >
+            <Text className="text-base font-psemibold my-3">
+              Product details
+            </Text>
+            <AntDesign name="right" size={20} color="gray" />
+          </TouchableOpacity>
+
+          <Modal
+            isVisible={isModalVisible}
+            onBackdropPress={toggleModal}
+            className="m-0 justify-end"
+          >
+            <View className="bg-white rounded-t-3xl h-auto p-4 w-full items-center">
+              <View className="w-full flex justify-between items-center flex-row">
+                <Text className="w-full text-base font-psemibold border-b-[1px] border-gray-300 py-3">
+                  Product Details
+                </Text>
+              </View>
+              <View className="w-full mt-4">
+                <View className="flex flex-row items-center mb-2">
+                  <Text className="text-base font-pregular flex-1">Stock</Text>
+                  <Text className="flex-1 text-sm font-pregular text-gray-500">
+                    2938
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center mb-2">
+                  <Text className="text-base font-pregular flex-1">Brand</Text>
+                  <Text className="flex-1 text-sm font-pregular text-gray-500">
+                    Sido Tech VN
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center mb-2">
+                  <Text className="text-base font-pregular flex-1">Warranty</Text>
+                  <Text className="flex-1 text-sm font-pregular text-gray-500">
+                    12 months
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center mb-2">
+                  <Text className="text-base font-pregular flex-1">Type warranty</Text>
+                  <Text className="flex-1 text-sm font-pregular text-gray-500">
+                    1-1 exchange
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center mb-2">
+                  <Text className="text-base font-pregular flex-1">Ship from</Text>
+                  <Text className="flex-1 text-sm font-pregular text-gray-500">
+                    Ho Chi Minh City
+                  </Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={toggleModal}
+                className="bg-[#00BDD6] p-2 rounded-lg mt-3"
+              >
+                <Text className="text-sm font-pregular text-white">Done</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
+
+        <View className="flex flex-row justify-between items-center mb-5">
+          <View className="flex flex-row items-center">
+            <View className="border-2 rounded-full border-[#00BDD6] mr-2">
+              <Image
+                source={{ uri: "https://picsum.photos/200" }}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            </View>
+            <View>
+              <Text className="text-base font-psemibold">SidoTech</Text>
+              <Text>Online 2 minutes ago</Text>
+            </View>
+          </View>
+
+          <View>
+            <TouchableOpacity className="flex flex-row items-center border-2 border-[#00BDD6] p-2 rounded-lg">
+              <Text className="text-sm font-pregular text-[#00BDD6]">
+                Visit shop
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -255,14 +362,17 @@ const ProductDetail = () => {
                 onValueChange={toggleSwitch}
                 value={isEnabled}
               />
+              <ForwardedToast ref={(ref) => Toast.setRef(ref)} />
             </View>
           </View>
         </View>
 
         <View className="flex flex-row justify-between items-center my-4">
-          <View className="bg-white border-[1px] rounded-md border-[#00bdd6] p-3 mr-3">
-            <Ionicons name="cart-outline" size={24} color="#00bdd6" />
-          </View>
+          <Link href="/details/Cart" asChild>
+            <TouchableOpacity className="bg-white border-[1px] rounded-md border-[#00bdd6] p-3 mr-3">
+              <Ionicons name="cart-outline" size={24} color="#00bdd6" />
+            </TouchableOpacity>
+          </Link>
 
           <Link href="./Checkout" asChild>
             <TouchableOpacity className="flex-1">
@@ -273,6 +383,7 @@ const ProductDetail = () => {
           </Link>
         </View>
       </ScrollView>
+      <ForwardedToast ref={(ref) => Toast.setRef(ref)} position="bottom" />
     </SafeAreaView>
   );
 };

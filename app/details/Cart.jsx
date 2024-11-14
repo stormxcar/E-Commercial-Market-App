@@ -12,6 +12,8 @@ import {
 import React, { useState, useEffect } from "react";
 import { CheckBox } from "react-native-elements";
 import CartProduct from "../../components/CartProduct";
+import { API_DATA } from "../../constants/data";
+import { Link } from "expo-router";
 
 const Cart = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -22,16 +24,11 @@ const Cart = () => {
   const getData = async () => {
     try {
       setLoading(true);
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbyx5-e6QF94rs-LLpmDKL_5lHMMOlEddxC1ObmB3AwGlwdez-f0idyz4S7nSHoutjsTOQ/exec"
-      );
+      const res = await fetch(API_DATA);
       const data = await res.json();
       // Lọc ra dữ liệu của sheet 'inbox' từ JSON trả về
       setDataCart(data.cart || []);
-
-      console.log("====================================");
-      console.log(data.cart);
-      console.log("====================================");
+      // console.log(data.cart);
     } catch (error) {
       console.error(error);
       setDataCart([]);
@@ -91,9 +88,11 @@ const Cart = () => {
           </View>
           <View className="flex flex-row items-center">
             <Text className="font-pregular text-base">Total: $0</Text>
-            <TouchableOpacity className="py-3 px-10 bg-[#00bdd6] ml-2">
-              <Text className="text-base font-pbold text-white">Buy (0)</Text>
-            </TouchableOpacity>
+            <Link href="/details/Feedback" asChild>
+              <TouchableOpacity className="py-3 px-10 bg-[#00bdd6] ml-2">
+                <Text className="text-base font-pbold text-white">Buy (0)</Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
       </View>

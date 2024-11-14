@@ -7,11 +7,68 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { Link } from "expo-router";
+import Modal from "react-native-modal";
+import Timeline from "react-native-timeline-flatlist";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const Account = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const data = [
+    {
+      time: "09:00",
+      title: "Order Placed",
+      description: "Your order has been placed.",
+    },
+    {
+      time: "12:00",
+      title: "Order Confirmed",
+      description: "Your order has been confirmed.",
+    },
+    {
+      time: "15:00",
+      title: "Order Shipped",
+      description: "Your order has been shipped.",
+    },
+    {
+      time: "18:00",
+      title: "Out for Delivery",
+      description: "Your order is out for delivery.",
+    },
+    {
+      time: "20:00",
+      title: "Delivered",
+      description: "Your order has been delivered.",
+    },
+  ];
+  const renderCircle = (rowData, sectionID, rowID) => {
+    return (
+      <MaterialCommunityIcons
+        name="checkbox-marked-circle-outline"
+        size={20}
+        color="#00BDD6"
+      />
+    );
+  };
+
+  const renderDetail = (rowData, sectionID, rowID) => {
+    return (
+      <View className="flex-1 p-3 bg-[#f0f0f0] rounded-md">
+        <Text className="font-pbold mb-2">{rowData.title}</Text>
+        <Text className="font-pregular text-gray">{rowData.description}</Text>
+      </View>
+    );
+  };
+
   const dataCategory = [
     {
       id: 1,
@@ -31,7 +88,7 @@ const Account = () => {
     {
       id: 4,
       img: "https://picsum.photos/200",
-      categoryName: "My feedback",
+      categoryName: "Feedback",
     },
     {
       id: 5,
@@ -51,29 +108,41 @@ const Account = () => {
       img: "https://picsum.photos/200",
       name: "Headphone",
       price: "$100",
-      status:"Delivery",
-      date:"July 10, 2024"
+      status: "Delivery",
+      date: "July 10, 2024",
     },
     {
       id: 2,
       img: "https://picsum.photos/200",
       name: "Headphone",
       price: "$100",
-      status:"Delivery",
-      date:"July 10, 2024"
+      status: "Delivery",
+      date: "July 10, 2024",
     },
     {
       id: 3,
       img: "https://picsum.photos/200",
       name: "Headphone",
       price: "$100",
-      status:"Delivery",
-      date:"July 10, 2024"
+      status: "Delivery",
+      date: "July 10, 2024",
     },
   ];
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
   return (
     <SafeAreaView className="flex-1">
-      <ScrollView showsVerticalScrollIndicator={true} className="w-full h-full">
+      <ScrollView
+        showsVerticalScrollIndicator={true}
+        className="w-full h-full"
+        refreshControl={<RefreshControl refreshing={refreshing} />}
+        onRefresh={onRefresh}
+      >
         {/* Header Component */}
         <View className="px-3 pt-5 py-4 flex flex-row w-full items-center gap-3">
           <Image
@@ -81,29 +150,41 @@ const Account = () => {
             className="w-10 h-10 rounded-full"
           />
           <View>
-            <Text className="text-base font-psemibold">Nguyen Kha</Text>
-            <Text className="text-base font-pregular text-[#00bdd6]">Welcome back!</Text>
+            <Link href="/details/UpdateProfile" asChild>
+              <TouchableOpacity className="">
+                <Text className="text-base font-psemibold">Nguyen Bao Kha</Text>
+              </TouchableOpacity>
+            </Link>
+
+            <Text className="text-base font-pregular text-[#00bdd6]">
+              Welcome back!
+            </Text>
           </View>
         </View>
 
         {/* Category Grid */}
         <View className="flex flex-wrap flex-row justify-between px-3 w-full">
           {dataCategory.map((item) => (
-            <TouchableOpacity
+            <Link
               key={item.id}
-              className="flex flex-col items-center justify-center p-3 w-[100px] border-[1px] border-gray-300 mb-3 mr-3 rounded-lg"
+              href={
+                item.categoryName === "Feedback" ? "/details/Feedback" : "#"
+              }
+              asChild
             >
-              <View className="bg-purple-200 rounded-full flex items-center justify-center p-4 mb-3">
-                <Image
-                  className="w-7 h-7 m-2"
-                  source={{ uri: item.img }}
-                  resizeMode="cover"
-                />
-              </View>
-              <Text className="font-pregular text-xs text-center flex-wrap">
-                {item.categoryName}
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity className="flex flex-col items-center justify-center p-3 w-[100px] border-[1px] border-gray-300 mb-3 mr-3 rounded-lg">
+                <View className="bg-purple-200 rounded-full flex items-center justify-center p-4 mb-3">
+                  <Image
+                    className="w-7 h-7 m-2"
+                    source={{ uri: item.img }}
+                    resizeMode="cover"
+                  />
+                </View>
+                <Text className="font-pregular text-xs text-center flex-wrap">
+                  {item.categoryName}
+                </Text>
+              </TouchableOpacity>
+            </Link>
           ))}
         </View>
 
@@ -140,11 +221,63 @@ const Account = () => {
                 Return item
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity className="flex-1 p-3 rounded-lg bg-[#00BDD6]">
-              <Text className="text-base text-center font-psemibold text-white">
-                Track Order
-              </Text>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                className="flex-1 p-3 rounded-lg bg-[#00BDD6]"
+                onPress={toggleModal}
+              >
+                <Text className="text-base text-center font-psemibold text-white">
+                  Track Order
+                </Text>
+              </TouchableOpacity>
+              <Modal
+                isVisible={isModalVisible}
+                onBackdropPress={toggleModal}
+                className="m-0 justify-end"
+              >
+                <View className="bg-white p-4 rounded-t-2xl h-[90%] justify-center items-center">
+                  <Text className="text-base font-pbold mb-10 border-b-[1px] w-full pb-2">
+                    Order Timeline
+                  </Text>
+                  <Timeline
+                    className="w-full"
+                    data={data}
+                    circleSize={20}
+                    circleColor="#00BDD6"
+                    lineColor="#00BDD6"
+                    timeContainerStyle={{ minWidth: 60, marginTop: 0 }}
+                    timeStyle={{
+                      textAlign: "center",
+                      backgroundColor: "#00BDD6",
+                      color: "white",
+                      padding: 5,
+                      borderRadius: 13,
+                    }}
+                    descriptionStyle={{ color: "gray" }}
+                    options={{
+                      style: { paddingTop: 5 },
+                    }}
+                    innerCircle={"icon"}
+                    // renderCircle={renderCircle}
+                    renderDetail={renderDetail}
+                    separator={false}
+                    detailContainerStyle={{
+                      marginBottom: 10,
+                      paddingLeft: 5,
+                      paddingRight: 5,
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={toggleModal}
+                    className="mt-4 p-2 bg-[#00BDD6] rounded-sm"
+                  >
+                    <Text className="text-base font-psemibold text-white">
+                      Done
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+            </View>
           </View>
 
           {/* Summary */}

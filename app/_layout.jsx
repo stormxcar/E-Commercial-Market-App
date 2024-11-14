@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 // import '../src/styles/tailwind.css';
 import { useFonts } from "expo-font";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import ProductDetail_2 from "../components/ProductShowDetail_2";
+// import Toast from "react-native-toast-message";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -108,6 +108,7 @@ const RootLayout = () => {
           ),
         }}
       />
+     
       <Stack.Screen name="(tabs)/search" options={{ headerShown: false }} />
     </Stack>
   );

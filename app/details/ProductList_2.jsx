@@ -1,10 +1,21 @@
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import ProductShowList_2 from "../../components/ProductShowList_2";
 import SearchBox from "../../components/SearchBox";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ProductList_2 = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { categoryName } = route.params;
+
   const data = [{ key: "header" }, { key: "content" }];
+
+  useEffect(() => {
+    if (categoryName) {
+      navigation.setOptions({ title: categoryName });
+    }
+  }, [categoryName]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

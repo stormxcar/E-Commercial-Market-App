@@ -13,32 +13,72 @@ import CardList from "./CardList";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Swiper from "react-native-swiper";
 import ProductCard from "./ProductCard";
+import { Link } from "expo-router";
 
-const ProductShowList_2 = () => {
+const ProductShowList_2 = ({ searchQuery }) => {
+  // const dataProductCard = [
+  //   {
+  //     id: 1,
+  //     name: "Iphone",
+  //     img: "https://picsum.photos/200",
+  //     price: "$899",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Smart Watch",
+  //     img: "https://picsum.photos/200",
+  //     price: "$899",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Tablet",
+  //     img: "https://picsum.photos/200",
+  //     price: "$789",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Headphone",
+  //     img: "https://picsum.photos/200",
+  //     price: "$999",
+  //   },
+  //   // Add more products as needed
+  // ];
   const dataProductCard = [
     {
       id: 1,
-      name: "Smart Phone",
+      name: "Iphone",
       img: "https://picsum.photos/200",
-      price: "$899",
+      price: 899,
+      sales: 50,
+      matched: 80,
+      popular: 90,
     },
     {
       id: 2,
-      name: "Smart Phone",
+      name: "Smart Watch",
       img: "https://picsum.photos/200",
-      price: "$899",
+      price: 899,
+      sales: 30,
+      matched: 70,
+      popular: 85,
     },
     {
       id: 3,
-      name: "Smart Phone",
+      name: "Tablet",
       img: "https://picsum.photos/200",
-      price: "$789",
+      price: 789,
+      sales: 70,
+      matched: 90,
+      popular: 95,
     },
     {
       id: 4,
-      name: "Smart Phone",
+      name: "Headphone",
       img: "https://picsum.photos/200",
-      price: "$999",
+      price: 999,
+      sales: 90,
+      matched: 60,
+      popular: 80,
     },
     // Add more products as needed
   ];
@@ -75,33 +115,80 @@ const ProductShowList_2 = () => {
   ];
 
   const [selectedButton, setSelectedButton] = useState("Best sales");
+  const [isPriceAscending, setIsPriceAscending] = useState(true);
+
+  // const filteredProducts = dataProduct.filter((product) =>
+  //   product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
   const handlePress = (button) => {
+    if (button === "Price") {
+      setIsPriceAscending(!isPriceAscending);
+    }
     setSelectedButton(button);
   };
+
+  const getFilteredProductsBySale = () => {
+    return dataProduct.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+  const getDataProductBySale = getFilteredProductsBySale();
+
+  const getFilteredProductsBySelection = () => {
+    let filteredProducts = dataProductCard.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    switch (selectedButton) {
+      case "Best sales":
+        return filteredProducts.sort((a, b) => b.sales - a.sales);
+      case "Best matched":
+        return filteredProducts.sort((a, b) => b.matched - a.matched);
+      case "Popular":
+        return filteredProducts.sort((a, b) => b.popular - a.popular);
+      case "Price":
+        return filteredProducts.sort((a, b) =>
+          isPriceAscending ? a.price - b.price : b.price - a.price
+        );
+      default:
+        return filteredProducts;
+    }
+  };
+
+  const getDataProductBySelection = getFilteredProductsBySelection();
 
   const images = [
     "https://picsum.photos/200/300",
     "https://picsum.photos/200/301",
     "https://picsum.photos/200/302",
   ];
+
+  const [visibleProducts, setVisibleProducts] = useState(2); // Initial number of products to display
+
+  const handleSeeMore = () => {
+    setVisibleProducts((prev) => prev + 2); // Increase the number of visible products by 2
+  };
+  
   return (
     <SafeAreaView className="px-3 py-5">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <View className="flex flex-row w-full items-center justify-between mb-3">
             <Text className="font-pmedium text-base">Sale products</Text>
-            <TouchableOpacity className="flex flex-row">
-              <Text className="font-pregular text-base text-gray-400 text-center">
-                See all
-              </Text>
-              <AntDesign name="right" size={20} color="gray" />
-            </TouchableOpacity>
+            <Link href="details/ProductList" asChild>
+              <TouchableOpacity className="flex flex-row">
+                <Text className="font-pregular text-base text-gray-400 text-center">
+                  See all
+                </Text>
+                <AntDesign name="right" size={20} color="gray" />
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
         <View className="flex flex-row justify-between items-centerw-full h-auto">
           <FlatList
-            data={dataProduct}
+            data={getDataProductBySale}
             keyExtractor={(item) => item.id}
             ld
             renderItem={({ item }) => {
@@ -147,7 +234,7 @@ const ProductShowList_2 = () => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              className={`rounded-lg px-5 py-2 ${
+              className={`rounded-lg px-5 py-2 mr-3 ${
                 selectedButton === "Popular" ? "bg-[#00bdd6]" : "bg-gray-200"
               }`}
               onPress={() => handlePress("Popular")}
@@ -156,23 +243,47 @@ const ProductShowList_2 = () => {
                 Popular
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              className={`rounded-lg px-5 py-2 ${
+                selectedButton === "Price" ? "bg-[#00bdd6]" : "bg-gray-200"
+              }`}
+              onPress={() => handlePress("Price")}
+            >
+              <Text className="font-pmedium text-base text-center">Price</Text>
+            </TouchableOpacity>
           </ScrollView>
         </View>
 
         <View>
           <View>
             <View className="py-4 flex flex-row flex-wrap justify-between">
-              {dataProductCard.map((item) => (
-                <View className="w-full mb-2" key={item.id}>
-                  <CardList
-                    containerStyles={"w-full flex flex-row items-center"}
-                    imageStyles={"w-[100px] h-[100px]"}
-                    img={item.img}
-                    name={item.name}
-                    price={item.price}
-                  />
-                </View>
-              ))}
+              {getDataProductBySelection
+                .slice(0, visibleProducts)
+                .map((item) => (
+                  <View className="w-full mb-2" key={item.id}>
+                    <CardList
+                      containerStyles={"w-full flex flex-row items-center"}
+                      imageStyles={"w-[100px] h-[100px]"}
+                      img={item.img}
+                      name={item.name}
+                      price={item.price}
+                    />
+                  </View>
+                ))}
+            </View>
+
+            <View className="mb-3 w-full items-center justify-center">
+              {visibleProducts < getDataProductBySelection.length && (
+                <TouchableOpacity
+                  className="bg-[#00BDD6] w-[40%] rounded-sm"
+                  onPress={handleSeeMore}
+                >
+                  <Text className="font-pmedium text-base text-center text-white p-2">
+                    See more
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

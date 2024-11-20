@@ -23,8 +23,8 @@ import { useNavigation } from "expo-router";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const Home = () => {
-  const navigation = useNavigation();
+const Home = ({ navigation }) => {
+  // const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
 
   const dataCategory = [
@@ -57,28 +57,28 @@ const Home = () => {
   const dataProduct = [
     {
       id: 1,
-      img: require("../../assets/images/product_shoe.png"),
+      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
       name: "Sneaker",
       countReviews: "10",
       price: "100",
     },
     {
       id: 2,
-      img: require("../../assets/images/product_tablet.png"),
+      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
       name: "Tablet",
       countReviews: "10",
       price: "100",
     },
     {
       id: 3,
-      img: require("../../assets/images/product_cloth.png"),
+      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
       name: "Kid cloth",
       countReviews: "10",
       price: "100",
     },
     {
       id: 4,
-      img: require("../../assets/images/product_fruit.png"),
+      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
       name: "Green avocado",
       countReviews: "10",
       price: "100",
@@ -91,9 +91,9 @@ const Home = () => {
     setRefreshing(false);
   };
   return (
-    <SafeAreaView className="flex-1 bg-white py-3">
+    <SafeAreaView className="flex-1 bg-white pb-3">
       <ScrollView
-        refreshControl={<RefreshControl refreshing={refreshing}/>}
+        refreshControl={<RefreshControl refreshing={refreshing} />}
         showsVerticalScrollIndicator={false}
         onRefresh={onRefresh}
       >
@@ -184,7 +184,7 @@ const Home = () => {
                     countReviews={item.countReviews}
                     price={item.price}
                     productId={item.id}
-                    containerStyles={"w-[150px]"}
+                    containerStyles={"w-[180px]"}
                   />
                 );
               }}

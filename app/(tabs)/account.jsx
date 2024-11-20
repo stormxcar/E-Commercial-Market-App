@@ -169,6 +169,7 @@ const Account = () => {
               key={item.id}
               href={
                 item.categoryName === "Feedback" ? "/details/Feedback" : "#"
+                || item.categoryName === "Shipping" ? "/details/Shipping" : "#"
               }
               asChild
             >
@@ -183,6 +184,13 @@ const Account = () => {
                 <Text className="font-pregular text-xs text-center flex-wrap">
                   {item.categoryName}
                 </Text>
+                {item.categoryName === "Shipping" && (
+                  <View className="bg-[#00BDD6] rounded-full flex items-center justify-center p-2 absolute top-[-20px] right-[-20px] w-10 h-10">
+                    <Text className="font-pregular text-xs text-center flex-wrap text-white">
+                      1
+                    </Text>
+                  </View>
+                )}
               </TouchableOpacity>
             </Link>
           ))}
@@ -216,68 +224,8 @@ const Account = () => {
 
           {/* Buttons */}
           <View className="py-5 flex flex-row w-full justify-between">
-            <TouchableOpacity className="flex-1 border-2 mr-3 border-black bg-white p-3 rounded-lg">
-              <Text className="text-base text-center font-psemibold text-black">
-                Return item
-              </Text>
-            </TouchableOpacity>
-            <View>
-              <TouchableOpacity
-                className="flex-1 p-3 rounded-lg bg-[#00BDD6]"
-                onPress={toggleModal}
-              >
-                <Text className="text-base text-center font-psemibold text-white">
-                  Track Order
-                </Text>
-              </TouchableOpacity>
-              <Modal
-                isVisible={isModalVisible}
-                onBackdropPress={toggleModal}
-                className="m-0 justify-end"
-              >
-                <View className="bg-white p-4 rounded-t-2xl h-[90%] justify-center items-center">
-                  <Text className="text-base font-pbold mb-10 border-b-[1px] w-full pb-2">
-                    Order Timeline
-                  </Text>
-                  <Timeline
-                    className="w-full"
-                    data={data}
-                    circleSize={20}
-                    circleColor="#00BDD6"
-                    lineColor="#00BDD6"
-                    timeContainerStyle={{ minWidth: 60, marginTop: 0 }}
-                    timeStyle={{
-                      textAlign: "center",
-                      backgroundColor: "#00BDD6",
-                      color: "white",
-                      padding: 5,
-                      borderRadius: 13,
-                    }}
-                    descriptionStyle={{ color: "gray" }}
-                    options={{
-                      style: { paddingTop: 5 },
-                    }}
-                    innerCircle={"icon"}
-                    // renderCircle={renderCircle}
-                    renderDetail={renderDetail}
-                    separator={false}
-                    detailContainerStyle={{
-                      marginBottom: 10,
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={toggleModal}
-                    className="mt-4 p-2 bg-[#00BDD6] rounded-sm"
-                  >
-                    <Text className="text-base font-psemibold text-white">
-                      Done
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </Modal>
-            </View>
+           
+            
           </View>
 
           {/* Summary */}

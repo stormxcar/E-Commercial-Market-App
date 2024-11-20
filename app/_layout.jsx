@@ -5,6 +5,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import AntDesign from "@expo/vector-icons/AntDesign";
 // import Toast from "react-native-toast-message";
+import Cart from "../app/details/Cart";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,6 +43,7 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="details" options={{ headerShown: false }} />
       <Stack.Screen
         name="details/ProductList"
         options={{
@@ -108,8 +110,12 @@ const RootLayout = () => {
           ),
         }}
       />
-     
+
       <Stack.Screen name="(tabs)/search" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Cart"
+        options={{ headerShown: false, title: "Cart" }}
+      />
     </Stack>
   );
 };

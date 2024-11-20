@@ -12,8 +12,27 @@ import React from "react";
 import CardCheckout from "../../components/CardCheckout";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
+import { useRoute } from "@react-navigation/native";
 
 const Checkout = () => {
+  const router = useRoute();
+  const { selectedItems , totalPrice} = router.params;
+  const items = JSON.parse(selectedItems);
+
+  console.log('====================================');
+  console.log('items', items);
+  console.log('====================================');
+
+  if (!items) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>No items selected</Text>
+      </SafeAreaView>
+    );
+  }
+
+   // Log the selected items to verify
+
   const data = [{ key: "header" }, { key: "content" }];
 
   return (
@@ -27,7 +46,18 @@ const Checkout = () => {
           } else {
             return (
               <ScrollView className="px-5 py-5">
-                <CardCheckout />
+                <View>
+                  {items.map((item, index) => (
+                    <CardCheckout
+                      key={index}
+                      name={item.name}
+                      price={item.price}
+                      quantity={item.quantity}
+                      status={item.status}
+                      img={item.img}
+                    />
+                  ))}
+                </View>
 
                 <View className="my-3">
                   <Text className="font-pmedium text-base">Voucher</Text>
@@ -49,11 +79,11 @@ const Checkout = () => {
                     TOTAL
                   </Text>
                   <Text className="font-psemibold text-base text-center">
-                    $2,888
+                    ${totalPrice}
                   </Text>
                 </View>
 
-                <Link href="./MethodPayment" asChild>
+                <Link href={{pathname:"./MethodPayment", params: {totalPrice: totalPrice} }}asChild>
                   <TouchableOpacity className="flex-1 bg-[#00bdd6] flex-row items-center justify-center p-4 rounded-md my-3">
                     <Text className="font-pregular text-base text-white text-center">
                       Next

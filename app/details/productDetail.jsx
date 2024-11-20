@@ -13,7 +13,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const ProductDetail = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { name } = route.params;
+  const { id, img, name, countReviews, price, status } = route.params;
   const data = [{ key: "header" }, { key: "content" }];
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const ProductDetail = () => {
           if (item.key === "header") {
             return <></>;
           } else {
-            return <ProductShowDetail />;
+            return <ProductShowDetail product={{ id, img, name, countReviews, price, status }}/>;
           }
         }}
       />

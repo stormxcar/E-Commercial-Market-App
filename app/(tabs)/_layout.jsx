@@ -15,6 +15,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { router } from "expo-router";
 
 import Home from "./home";
 import Search from "./search";
@@ -27,7 +28,9 @@ import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";
 import Cart from "../details/Cart";
 import ChatScreen from "../details/ChatScreen";
+import SearchScreen from "../(tabs)/search"
 import { Link } from "expo-router";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -68,12 +71,17 @@ const HomeStack = () => (
     <Stack.Screen
       name="Cart"
       component={Cart}
-      options={{ headerShown: false, title: "Account" }}
+      options={{ headerShown: false, title: "Cart" }}
     />
     <Stack.Screen
       name="ChatScreen"
       component={ChatScreen}
       options={{ headerShown: false, title: "Chat" }}
+    />
+    <Stack.Screen
+      name="SearchScreen"
+      component={SearchScreen}
+      options={{ headerShown: false, title: "Search" }}
     />
   </Stack.Navigator>
 );
@@ -126,10 +134,23 @@ const AccountStack = () => (
   </Stack.Navigator>
 );
 
-const TabIcon = ({ icon, color, name, focused, size }) => {
+const TabIcon = ({ icon, color, name, focused, size, badgeCount }) => {
   return (
-    <View style={{ justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        flex: 1,
+        width: 80,
+        height: "auto",
+      }}
+    >
       <AntDesign name={icon} size={size} color={focused ? "#00bdd6" : color} />
+      {badgeCount > 0 && (
+        <View className="absolute top-[-10px] right-[19px] bg-[#0bbdd6] w-4 h-4 rounded-full flex items-center justify-center">
+          <Text className="text-white text-xs text-center">{badgeCount}</Text>
+        </View>
+      )}
       <Text
         style={{
           fontSize: 10,
@@ -154,15 +175,26 @@ const HeaderRight = () => {
         marginRight: 10,
       }}
     >
-      <TouchableOpacity>
-        <MaterialIcons name="notifications-none" size={32} color="black" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Cart")}
-        style={{ marginRight: 10 }}
-      >
-        <AntDesign name="shoppingcart" size={30} color="black" />
-      </TouchableOpacity>
+      <View className="mr-2">
+        <TouchableOpacity>
+          <MaterialIcons name="notifications-none" size={32} color="black" />
+        </TouchableOpacity>
+        <Text className=" bg-[#0bbdd6] text-white min-w-full rounded-full text-center absolute top-[-5px] right-[-10px] ">
+          99+
+        </Text>
+      </View>
+
+      <View className="mr-2">
+        <TouchableOpacity
+          onPress={() => router.push("/details/Cart")}
+          style={{ marginRight: 10 }}
+        >
+          <AntDesign name="shoppingcart" size={30} color="black" />
+        </TouchableOpacity>
+        <Text className=" bg-[#0bbdd6] text-white min-w-min rounded-full text-center absolute top-[-5px] right-[0px] ">
+          99
+        </Text>
+      </View>
 
       <TouchableOpacity onPress={() => navigation.navigate("Account")}>
         <Image
@@ -183,21 +215,26 @@ const HeaderRight = () => {
 const TabsLayout = () => {
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      className="flex-1"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1 }}>
+        <View className="flex-1 flex flex-row">
           <Tab.Navigator
             screenOptions={() => ({
               tabBarShowLabel: false,
+
               tabBarActiveTintColor: "#FFA001",
               tabBarInactiveTintColor: "#CDCDE0",
               tabBarStyle: {
                 backgroundColor: "#fff",
                 borderTopWidth: 1,
                 borderTopColor: "lightgray",
-                height: 84,
+                height: 80,
+                paddingTop: 20,
+                marginTop: 0,
+                flexDirection: "row",
+                justifyContent: "space-between",
               },
 
               headerRight: () => <HeaderRight />,
@@ -263,6 +300,7 @@ const TabsLayout = () => {
                     name="Inbox"
                     focused={focused}
                     size={28}
+                    badgeCount={99}
                   />
                 ),
               }}

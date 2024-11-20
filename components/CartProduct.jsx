@@ -9,12 +9,17 @@ import {
 import React, { useState } from "react";
 import { CheckBox } from "react-native-elements";
 
-const CartProduct = ({ name, img, status, price, quantity }) => {
+const CartProduct = ({ name, img, status, price, quantity, onSelect }) => {
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+    onSelect(!isChecked, price)
+  }
 
   return (
     <View className="flex-row items-center px-3 mb-3">
-      <CheckBox checked={isChecked} onPress={() => setIsChecked(!isChecked)} />
+      <CheckBox checked={isChecked} onPress={() => handleCheck()} />
       <View>
         <View className="flex flex-row items-center">
           <View className="border-2 p-4 w-[100px] h-[100px] mr-4">

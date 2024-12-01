@@ -1,19 +1,65 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, {useState} from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
+import { API_DATA } from "../../constants/data";
 
 const MethodPayment = () => {
+  const navigation = useNavigation();
   const route = useRoute();
-  const { totalPrice } = route.params;
+  const { totalPrice, title, items } = route.params;
+
+  console.log('====================================');
+  console.log(items);
+  console.log('====================================');
 
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const updateOrderStatus = async (newStatus) => {
+    try {
+      const response = await fetch(API_DATA, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "update_status",
+          new_status: newStatus, // Trạng thái mới ("shipping", "completed", ...)
+        }),
+      });
+  
+      if (!response.ok) throw new Error("Lỗi khi cập nhật trạng thái.");
+  
+      const result = await response.json();
+      if (result.result === "success") {
+        Alert.alert("Cập nhật trạng thái thành công!");
+      } else {
+        Alert.alert("Lỗi:", result.message || "Không rõ lý do.");
+      }
+    } catch (error) {
+      console.error("Lỗi:", error);
+      Alert.alert("Không thể cập nhật trạng thái đơn hàng.", error.message);
+    }
+  };
+  const handleCheckout = () => {
+    updateOrderStatus("shipping");
+  };
+  
+  
+
+  useEffect(()=> {
+    if(title) {
+      navigation.setOptions({ title: title });
+    }
+  }, [title]);
+
+
 
   return (
     <View>
@@ -22,54 +68,51 @@ const MethodPayment = () => {
         <Text className="text-2xl font-pbold text-center">${totalPrice}</Text>
       </View>
       <View className="m-3">
-        <View className="border-2 flex-row items-center p-2 rounded-md mb-4">
-          <View className="w-[20%] mr-3">
+        <View className="border-2 border-green-500 flex-row items-center p-2 rounded-md mb-4 bg-gray-200 shadow-sm">
+          <View className="w-[10%] mr-3">
             <Image
               source={{ uri: "https://picsum.photos/200" }}
               className="w-10 h-10 rounded-full"
             />
           </View>
-
-          <View className="flex-row justify-between w-[72%]">
+          <View className="flex-row items-center justify-between w-[80%] ">
             <View>
-              <Text className="font-plight text-base">**** **** **** 1234</Text>
-              <Text className="font-pregular text-sm">Mastercard</Text>
+              <Text className="font-plight text-base">Received order</Text>
             </View>
-            <Text>Checked</Text>
+            <Text className="text-green-500 font-pmedium">Checked</Text>
           </View>
         </View>
-
         <View className="border-2 flex-row items-center p-2 rounded-md mb-4">
-          <View className="w-[20%] mr-3">
+          <View className="w-[10%] mr-3">
             <Image
               source={{ uri: "https://picsum.photos/200" }}
               className="w-10 h-10 rounded-full"
             />
           </View>
 
-          <View className="flex-row justify-between w-[72%]">
+          <View className="flex-row justify-between w-[80%]">
             <View>
               <Text className="font-plight text-base">**** **** **** 1234</Text>
               <Text className="font-pregular text-sm">Mastercard</Text>
             </View>
-            <Text>Checked</Text>
+            <Text>Check</Text>
           </View>
         </View>
 
         <View className="border-2 flex-row items-center p-2 rounded-md">
-          <View className="w-[20%] mr-3">
+          <View className="w-[10%] mr-3">
             <Image
               source={{ uri: "https://picsum.photos/200" }}
               className="w-10 h-10 rounded-full"
             />
           </View>
 
-          <View className="flex-row justify-between w-[72%]">
+          <View className="flex-row justify-between w-[80%]">
             <View>
               <Text className="font-plight text-base">n**67@gmail.com</Text>
               <Text className="font-pregular text-sm">Paypal</Text>
             </View>
-            <Text>Checked</Text>
+            <Text>Check</Text>
           </View>
         </View>
       </View>
@@ -81,7 +124,7 @@ const MethodPayment = () => {
         >
           <AntDesign name="plus" size={20} color="#00bdd6" />
           <Text className="text-[#00bdd6] font-pregular text-base text-center">
-            Add new card
+            Add new method
           </Text>
         </TouchableOpacity>
 
@@ -105,7 +148,6 @@ const MethodPayment = () => {
                   unlink
                 </Text>
               </View>
-              
             </View>
             <TouchableOpacity
               onPress={toggleModal}
@@ -118,7 +160,8 @@ const MethodPayment = () => {
       </View>
 
       <View className="px-3">
-        <Link href={{pathname:"./Payment", params: {totalPrice}}} asChild>
+        <Link onPress={handleCheckout}
+        href={{ pathname: "./Payment", params: { totalPrice , title:'Payment'} }} asChild>
           <TouchableOpacity className="bg-[#00bdd6] flex-row items-center justify-center p-4 rounded-md my-3">
             <Text className="text-white font-pregular text-base text-center">
               Pay now

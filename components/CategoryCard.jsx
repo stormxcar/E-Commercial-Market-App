@@ -7,7 +7,7 @@ import {
   ImageBackground,
 } from "react-native";
 import React from "react";
-import CustomButton from "./CustomButton";
+// import CustomButton from "./CustomButton";
 import { Link } from "expo-router";
 
 const CategoryCard = ({
@@ -21,20 +21,25 @@ const CategoryCard = ({
   return (
     <View className={`flex-1 ${containerStyles} `}>
       <Link href="../details/ProductDetail_2" asChild>
-        <TouchableOpacity onPress={onPress} className="rounded-lg w-full shadow-xl">
+        <TouchableOpacity
+          onPress={onPress}
+          className="rounded-lg w-full shadow-xl border-[1px] border-gray-100"
+        >
           <ImageBackground
             source={{ uri: img }}
-            className="w-full h-[200px] rounded-lg object-cover overflow-hidden shadow-2xl"
+            className="w-full h-[200px] rounded-t-lg object-cover overflow-hidden shadow-2xl"
           >
             {categoryName ? (
-              <Text className="font-pregular text-[#00BDD6] text-base pt-10 px-5">
+              <Text className="font-psemibold text-[#00BDD6] text-base pt-10 px-5">
                 {categoryName}
               </Text>
             ) : null}
             {discount ? (
-              <Text className="font-pregular text-[#00BDD6] text-base px-5">
-                {discount}
-              </Text>
+              <View className="bg-cyan-100 absolute top-0 right-0 w-[100px] p-1">
+                <Text className="font-pbold text-red-600 text-base px-5">
+                  {discount}
+                </Text>
+              </View>
             ) : null}
             {CustomButton ? (
               <View className="mt-2 px-5">
@@ -45,6 +50,25 @@ const CategoryCard = ({
               <View className="h-full w-full" />
             ) : null}
           </ImageBackground>
+          <View className="flex-row items-center justify-between">
+            <View className=" bg-white p-2 flex-1 rounded-bl-lg flex-row justify-center">
+              <Text className="text-sm line-through font-pmedium text-gray-400 mr-3">
+                $120
+              </Text>
+              <Text className="text-center font-pbold text-base text-[#00BDD6]">
+                $199
+              </Text>
+            </View>
+            <View className="flex-1 rounded-b-lg">
+              <Link href="../details/ProductDetail_2" asChild>
+                <TouchableOpacity className="bg-[#00BDD6] p-2 rounded-br-lg">
+                  <Text className="text-white font-pmedium text-base text-center">
+                    Buy now
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </View>
         </TouchableOpacity>
       </Link>
     </View>

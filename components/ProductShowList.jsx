@@ -8,6 +8,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import CardList from "./CardList";
@@ -15,6 +16,8 @@ import Swiper from "react-native-swiper";
 import { API_DATA } from "../constants/data";
 import { Link } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { v4 as uuidv4 } from "uuid";
+
 
 const ProductList = () => {
   const [dataProductCard, setDataProductCard] = useState([]);
@@ -62,6 +65,73 @@ const ProductList = () => {
     setVisibleProducts((prev) => prev + 2);
   };
 
+  const handleAddToCart = async (product) => {
+    try {
+      const imgUrl =
+        typeof product.img === "string" ? product.img : product.img.uri;
+  
+      // Fetch giỏ hàng hiện tại
+      const response_1 = await fetch(API_DATA);
+      const result = await response_1.json();
+      const data_cart = result.cart || []; // Giả sử API trả về `cart`
+  
+      // Kiểm tra sản phẩm có trong giỏ chưa
+      const existingProduct = data_cart.find((item) => item.name === product.name);
+  
+      if (existingProduct) {
+        // Nếu đã có, cập nhật số lượng
+        const response = await fetch(`${API_DATA}/${existingProduct.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...existingProduct,
+            quantity: existingProduct.quantity + 1, // Tăng số lượng
+          }),
+        });
+  
+        if (response.ok) {
+          Alert.alert("Thông báo", "Đã cập nhật số lượng sản phẩm trong giỏ hàng!");
+        } else {
+          throw new Error("Cập nhật sản phẩm thất bại!");
+        }
+      } else {
+        // Nếu chưa có, thêm mới sản phẩm
+        const response = await fetch(API_DATA, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "add",
+            id: uuidv4(), // Tạo ID duy nhất
+            name: product.name,
+            status: product.status,
+            price: product.price,
+            quantity: 1,
+            img: imgUrl,
+            status: product.status,
+          }),
+        });
+
+        console.log('====================================');
+        console.log(product.status);
+        console.log('====================================');
+  
+        if (response.ok) {
+          Alert.alert("Thành công", "Sản phẩm đã được thêm vào giỏ hàng!");
+        } else {
+          throw new Error("Thêm sản phẩm thất bại!");
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+      Alert.alert("Lỗi", error.message);
+    }
+  };
+  
+
   return (
     <SafeAreaView className="px-3 py-5">
       <ScrollView
@@ -93,7 +163,7 @@ const ProductList = () => {
             </TouchableOpacity> */}
             <View className="flex flex-row items-center justify-between">
               <Text className="text-base font-psemibold">Sales product</Text>
-              <Link
+              {/* <Link
                 href={{
                   pathname: "../details/FilterProduct",
                   params: { name: "Filter" },
@@ -103,7 +173,7 @@ const ProductList = () => {
                 <TouchableOpacity className="p-[8px] rounded-sm">
                   <Ionicons name="filter" size={24} color="#00bdd6" />
                 </TouchableOpacity>
-              </Link>
+              </Link> */}
             </View>
 
             <View className="py-4 flex flex-row flex-wrap justify-between">
@@ -116,6 +186,8 @@ const ProductList = () => {
                       img={item.img}
                       name={item.name}
                       price={item.price}
+                      product={item}
+                      handleAddToCart={handleAddToCart}
                     />
                   </View>
                 ))}

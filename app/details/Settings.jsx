@@ -6,10 +6,19 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 const Settings = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {title} = route.params;
+  useEffect(() => {
+    if(title){
+      navigation.setOptions({title})
+    }
+  }, [title]);
   return (
     <SafeAreaView>
       <ScrollView>

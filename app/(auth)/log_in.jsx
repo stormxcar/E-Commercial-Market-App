@@ -8,7 +8,7 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import image_main from "../../assets/images/logo_details.png";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
@@ -16,6 +16,8 @@ import { Link } from "expo-router";
 import { CheckBox } from "react-native-elements";
 import { router } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { API_DATA } from "../../constants/data";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LogIn = () => {
   const [form, setForm] = useState({
@@ -25,34 +27,53 @@ const LogIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const submit = (form) => {
+  const submit = async (form) => {
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
     setIsSubmitting(true);
-    fetch("https://6457b6671a4c152cf9887b69.mockapi.io/api/vd1/user", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(form),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setIsSubmitting(false);
-        if (data.email === form.email && data.password === form.password) {
-          Alert.alert("Success","đăng nhập thành công");
-          router.push("/home");        
-        } else {
-          console.log("đăng nhập thất bại");
-        }
-      })
-      .catch((error) => {
-        setIsSubmitting(false);
-        console.error("Error:", error);
+
+    try {
+      console.log("Sending data:", {
+        action: "login",
+        email: form.email,
+        password: form.password,
       });
+
+      const response = await fetch(API_DATA, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "login", // Đảm bảo gửi đúng hành động tới API
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+      setIsSubmitting(false);
+
+      // console.log("Response data:", data); // Kiểm tra phản hồi từ API
+
+      if (data.result === "success") {
+        // Chuyển đổi user_id thành chuỗi trước khi lưu
+        await AsyncStorage.setItem("user_id", String(data.user.id));
+
+        Alert.alert("Success", "Đăng nhập thành công");
+        router.push("/home"); // Điều hướng tới trang home
+      } else {
+        Alert.alert("Error", data.message || "Đăng nhập thất bại");
+      }
+    } catch (error) {
+      setIsSubmitting(false);
+      console.error("Error:", error);
+      Alert.alert("Error", "Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
   };
+
   return (
     <SafeAreaView className="h-full bg-white px-5">
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -78,6 +99,8 @@ const LogIn = () => {
           handleChangeText={(e) => setForm({ ...form, email: e })}
           otherStyles="mt-7"
           keyboardType="email-address"
+          // autoCapitalize="none"
+          initialValue="nguyen23@gmail.com"
         />
         <FormField
           title="Password"
@@ -86,6 +109,7 @@ const LogIn = () => {
           value={form.password}
           handleChangeText={(e) => setForm({ ...form, password: e })}
           otherStyles="mt-7"
+          
         />
 
         <View className="items-center justify-start flex-row">

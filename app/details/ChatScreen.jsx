@@ -1,12 +1,22 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat, Bubble, Send, Actions } from "react-native-gifted-chat";
-import { useRoute } from "expo-router";
+// import { useRoute } from "expo-router";
 import { View } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ChatScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { nameFrom } = route.params;
+  useEffect(() => {
+    if (nameFrom) {
+      navigation.setOptions({ title: nameFrom });
+    }
+  }, [nameFrom]);
+
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {

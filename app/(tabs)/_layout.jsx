@@ -8,14 +8,17 @@ import {
   Keyboard,
   TouchableOpacity,
   Image,
+  AppState,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Home from "./home";
 import Search from "./search";
@@ -28,9 +31,10 @@ import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";
 import Cart from "../details/Cart";
 import ChatScreen from "../details/ChatScreen";
-import SearchScreen from "../(tabs)/search"
+import SearchScreen from "../(tabs)/search";
 import { Link } from "expo-router";
-
+import FilterProduct from "../details/FilterProduct";
+import { API_DATA } from "../../constants/data";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -94,6 +98,11 @@ const SearchStack = () => (
       component={Search}
       options={{ headerShown: false }} // Không hiện header khi ở trang Search
     />
+    <Stack.Screen
+      name="FilterProduct"
+      component={FilterProduct}
+      options={{ headerShown: false }} // Không hiện header khi ở trang FilterProduct
+    />
     {/* Thêm các màn hình khác nếu cần */}
   </Stack.Navigator>
 );
@@ -135,6 +144,22 @@ const AccountStack = () => (
 );
 
 const TabIcon = ({ icon, color, name, focused, size, badgeCount }) => {
+  const checkLogin = async () => {
+    try {
+      const userId = await AsyncStorage.getItem("user_id");
+
+      if (userId) {
+        router.push("/details/Cart"); // Điều hướng tới trang giỏ hàng
+      } else {
+        Alert.alert("Thông báo", "Bạn cần đăng nhập.");
+        router.push("/log_in"); // Điều hướng tới trang đăng nhập
+      }
+    } catch (error) {
+      console.error("Error checking user_id:", error);
+      Alert.alert("Lỗi", "Không thể xác thực người dùng. Vui lòng thử lại.");
+    }
+  };
+
   return (
     <View
       style={{
@@ -167,6 +192,73 @@ const TabIcon = ({ icon, color, name, focused, size, badgeCount }) => {
 const HeaderRight = () => {
   const navigation = useNavigation(); // Use the useNavigation hook
 
+  const [cartQuantity, setCartQuantity] = useState(0);
+  const [countNotification, setCountNotification] = useState(0);
+
+  useEffect(() => {
+    const fetchDataCart = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("user_id");
+
+        if (userId) {
+          const response = await fetch(API_DATA);
+          const data = await response.json();
+
+          // Lọc các sản phẩm theo user_id
+          const userProducts = data.productUser.filter(
+            item => item.user_id === parseInt(userId)
+          );
+
+          // Đếm số lượng sản phẩm của user
+          setCartQuantity(userProducts.length);
+
+         
+        } else {
+          setCartQuantity(0);
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        setCartQuantity(0);
+      }
+    };
+
+    fetchDataCart();
+
+    // Thêm listener để cập nhật realtime
+    const interval = setInterval(fetchDataCart, 5000); // Cập nhật mỗi 5 giây
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const checkLogin = async () => {
+    try {
+      const userId = await AsyncStorage.getItem("user_id");
+
+      if (userId) {
+        router.push({
+          pathname: "/details/Cart",
+          params: {
+            title: "Cart",
+          },
+        });
+      } else {
+        Alert.alert("Notification", "Please login to continue shopping", [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Login",
+            onPress: () => router.push("/log_in"),
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error checking user_id:", error);
+      Alert.alert("Lỗi", "Không thể xác thực người dùng. Vui lòng thử lại.");
+    }
+  };
+
   return (
     <View
       style={{
@@ -176,23 +268,41 @@ const HeaderRight = () => {
       }}
     >
       <View className="mr-2">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={checkLogin}>
           <MaterialIcons name="notifications-none" size={32} color="black" />
         </TouchableOpacity>
-        <Text className=" bg-[#0bbdd6] text-white min-w-full rounded-full text-center absolute top-[-5px] right-[-10px] ">
-          99+
+        <Text
+          className={` ${
+            countNotification > 0 ? "bg-[#0bbdd6] text-white" : "hidden"
+          } min-w-full rounded-full text-center absolute top-[-5px] right-[-10px] `}
+        >
+          {countNotification >= 1 ? countNotification : null}
         </Text>
       </View>
 
       <View className="mr-2">
+        {/* <Link
+          href={{ pathname: "/details/Cart", params: { title: "Cart" } }}
+          asChild
+        > */}
         <TouchableOpacity
-          onPress={() => router.push("/details/Cart")}
+          // onPress={() => router.push("/details/Cart")}
+          onPress={checkLogin}
           style={{ marginRight: 10 }}
         >
-          <AntDesign name="shoppingcart" size={30} color="black" />
+          {cartQuantity > 0 ? (
+            <AntDesign name="shoppingcart" size={30} color="#00bdd6" />
+          ) : (
+            <AntDesign name="shoppingcart" size={30} color="black" />
+          )}
         </TouchableOpacity>
-        <Text className=" bg-[#0bbdd6] text-white min-w-min rounded-full text-center absolute top-[-5px] right-[0px] ">
-          99
+        {/* </Link> */}
+        <Text
+          className={` ${
+            cartQuantity > 0 ? "bg-[#0bbdd6] text-white" : "hidden"
+          }  w-5 h-5 rounded-full text-center absolute top-[-5px] right-[0px] `}
+        >
+          {cartQuantity >= 1 ? cartQuantity : null}
         </Text>
       </View>
 
@@ -213,6 +323,37 @@ const HeaderRight = () => {
 };
 
 const TabsLayout = () => {
+  const [inboxQuantity, setInboxQuantity] = useState(0);
+
+  useEffect(() => {
+    const fetchDataInbox = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("user_id");
+
+        if (userId) {
+          // Nếu đã đăng nhập, gọi API để lấy dữ liệu inbox
+          const res = await fetch(API_DATA);
+          const data = await res.json();
+
+          // Lọc inbox theo user_id
+          // const userInbox = data.inbox.filter(
+          //   (item) => item.user_id === userId
+          // );
+
+          // Cập nhật số lượng inbox
+          // setInboxQuantity(userInbox.length);
+          setInboxQuantity(data.inbox.length);
+        } else {
+          setInboxQuantity(0); // Không hiển thị nếu chưa đăng nhập
+        }
+      } catch (error) {
+        console.error("Error fetching inbox data:", error);
+      }
+    };
+
+    fetchDataInbox();
+  }, [API_DATA]);
+
   return (
     <KeyboardAvoidingView
       className="flex-1"
@@ -300,7 +441,7 @@ const TabsLayout = () => {
                     name="Inbox"
                     focused={focused}
                     size={28}
-                    badgeCount={99}
+                    badgeCount={inboxQuantity}
                   />
                 ),
               }}
@@ -327,7 +468,13 @@ const TabsLayout = () => {
                       marginRight: 10,
                     }}
                   >
-                    <Link href="/details/Settings" asChild>
+                    <Link
+                      href={{
+                        pathname: "/details/Settings",
+                        params: { title: "Settings" },
+                      }}
+                      asChild
+                    >
                       <TouchableOpacity>
                         <AntDesign name="setting" size={24} color="black" />
                       </TouchableOpacity>

@@ -4,141 +4,144 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { CheckBox } from "react-native-elements";
 import Slider from "@react-native-community/slider";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { Link, useNavigation, useRoute } from "@react-navigation/native";
 
 const FilterProduct = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { name } = route.params;
+  const { currentFilters, setFilters } = route.params;
 
-  useEffect(() => {
-    if (name) {
-      navigation.setOptions({ title: name });
-    }
-  }, [name]);
+  const [priceRange, setPriceRange] = useState(
+    currentFilters.priceRange || [0, 1000]
+  );
+  const [deliveryOptions, setDeliveryOptions] = useState(
+    currentFilters.deliveryOptions || []
+  );
+  const [rating, setRating] = useState(currentFilters.rating || 0);
+  const [policies, setPolicies] = useState(currentFilters.policies || []);
 
-  const [isChecked, setIsChecked] = useState(false);
-  const [price, setPrice] = useState(500); // Default value for the slider
+  const deliveryChoices = ["Instant", "Express", "Standard"];
+  const policyChoices = ["Free shipping", "Best sells", "30-day Free Return"];
+
+  const handleApplyFilters = () => {
+    setFilters({
+      priceRange,
+      deliveryOptions,
+      rating,
+      policies,
+    });
+    navigation.goBack();
+  };
+
+  const renderCheckBox = ({ title, checked, onPress }) => (
+    <CheckBox
+      title={title}
+      checked={checked}
+      onPress={onPress}
+      containerStyle={{ backgroundColor: "transparent", borderWidth: 0 }}
+      textStyle={{ fontWeight: "normal" }}
+      checkedColor="#00bdd6"
+    />
+  );
 
   return (
     <SafeAreaView>
-      <View className="px-3 py-3">
-        <View className="flex flex-row items-center justify-between">
-          <Text className="font-psemibold text-gray-400 text-base">
+      <ScrollView>
+        {/* Shipping Options */}
+        <View className="px-3 py-3">
+          <Text className="font-psemibold text-gray-400 text-base mb-3">
             Shipping options
           </Text>
-          <AntDesign name="right" size={20} color="black" />
+          {deliveryChoices.map((option, index) =>
+            renderCheckBox({
+              key: index,
+              title: option,
+              checked: deliveryOptions.includes(option),
+              onPress: () =>
+                setDeliveryOptions((prev) =>
+                  prev.includes(option)
+                    ? prev.filter((item) => item !== option)
+                    : [...prev, option]
+                ),
+            })
+          )}
         </View>
-        <View>
-          <View className="flex flex-row items-center">
-            <CheckBox
-              checked={isChecked}
-              onPress={() => setIsChecked(!isChecked)}
-            />
-            <Text className="font-pmedium">Instant (2 hours delivery)</Text>
-          </View>
-          <View className="flex flex-row items-center">
-            <CheckBox
-              checked={isChecked}
-              onPress={() => setIsChecked(!isChecked)}
-            />
-            <Text className="font-pmedium">Express (2 days delivery)</Text>
-          </View>
-          <View className="flex flex-row items-center">
-            <CheckBox
-              checked={isChecked}
-              onPress={() => setIsChecked(!isChecked)}
-            />
-            <Text className="font-pmedium">Standard (7-10 days delivery)</Text>
-          </View>
-        </View>
-      </View>
 
-      <View className="px-3 py-3">
-        <View className="flex flex-row items-center justify-between mb-3">
-          <Text className="font-psemibold text-gray-400 text-base">
+        {/* Price Range */}
+        <View className="px-3 py-3">
+          <Text className="font-psemibold text-gray-400 text-base mb-3">
             Price range
           </Text>
-          <AntDesign name="right" size={20} color="black" />
-        </View>
-        <View>
-          <View className="flex flex-row justify-between">
-            <Text className="font-psemibold text-gray-400 text-base">
-              $0
-            </Text>
-            <Text className="font-psemibold text-gray-400 text-base">
-              $1000
-            </Text>
-          </View>
           <Slider
             style={{ width: "100%", height: 40 }}
             minimumValue={0}
             maximumValue={1000}
-            step={1}
+            step={50}
             minimumTrackTintColor="#1FB28A"
             maximumTrackTintColor="#d3d3d3"
             thumbTintColor="#1FB28A"
-            value={price}
-            onValueChange={(value) => setPrice(value)}
+            value={priceRange[1]}
+            onValueChange={(value) => setPriceRange([0, value])}
           />
+          <Text>
+            Selected Price: ${priceRange[0]} - ${priceRange[1]}
+          </Text>
         </View>
-      </View>
 
-      <View className="px-3 py-3 mb-3">
-        <View className="flex flex-row items-center justify-between">
-          <Text className="font-psemibold text-gray-400 text-base">
+        {/* Average Review */}
+        <View className="justify-between items-center px-3 py-3 flex-row ">
+          <Text className="font-psemibold text-gray-400 text-base ">
             Average review
           </Text>
-          <AntDesign name="right" size={20} color="black" />
-        </View>
-        <View className="flex flex-row items-center justify-center gap-2">
-          <AntDesign name="star" size={20} color="orange" />
-          <AntDesign name="star" size={20} color="orange" />
-          <AntDesign name="star" size={20} color="orange" />
-          <AntDesign name="star" size={20} color="orange" />
-          <AntDesign name="star" size={20} color="orange" />
-        </View>
-      </View>
-
-      <View className="px-3 py-3">
-        <View className="flex flex-row items-center justify-between">
-          <Text className="font-psemibold text-gray-400 text-base">Others</Text>
-          <AntDesign name="right" size={20} color="black" />
-        </View>
-        <View className="flex flex-wrap justify-between flex-row w-full mt-3">
-          <TouchableOpacity className="border-2 p-4 rounded-sm w-[48%] mb-3 mr-3 items-center flex-col border-[#00bdd6]">
-            <AntDesign name="right" size={20} color="black" />
-            <Text>30-day Free Return</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="border-2 p-4 rounded-sm w-[48%] mb-3 items-center flex-col">
-            <AntDesign name="right" size={20} color="black" />
-            <Text>Buyer Protection</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="border-2 p-4 rounded-sm w-[48%] items-center flex-col">
-            <AntDesign name="right" size={20} color="black" />
-            <Text>Best Deal</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="border-2 p-4 rounded-sm w-[48%] items-center flex-col">
-            <AntDesign name="right" size={20} color="black" />
-            <Text>Ship to store</Text>
-          </TouchableOpacity>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <TouchableOpacity key={star} onPress={() => setRating(star)}>
+              <Text style={{ color: rating >= star ? "orange" : "gray" }}>
+                {star} Star
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
-        <View className="mt-3">
-          <TouchableOpacity className="p-3 bg-[#00bdd6] rounded-md">
-            <Text className="font-psemibold text-base text-center text-white">Apply</Text>
+        {/* Policies */}
+        <View className="px-3 py-3">
+          <Text className="font-psemibold text-gray-400 text-base mb-3">
+            Others
+          </Text>
+          {policyChoices.map((policy, index) =>
+            renderCheckBox({
+              key: index,
+              title: policy,
+              checked: policies.includes(policy),
+              onPress: () =>
+                setPolicies((prev) =>
+                  prev.includes(policy)
+                    ? prev.filter((item) => item !== policy)
+                    : [...prev, policy]
+                ),
+            })
+          )}
+        </View>
+
+        {/* Apply Button */}
+        <View className="px-3 py-3">
+          <TouchableOpacity
+            onPress={handleApplyFilters}
+            className="p-3 bg-[#00bdd6] rounded-md"
+          >
+            <Text className="font-psemibold text-base text-center text-white">
+              Apply
+            </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 export default FilterProduct;
-
-const styles = StyleSheet.create({});

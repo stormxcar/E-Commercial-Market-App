@@ -6,10 +6,20 @@ import { useFonts } from "expo-font";
 import AntDesign from "@expo/vector-icons/AntDesign";
 // import Toast from "react-native-toast-message";
 import Cart from "../app/details/Cart";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+  useEffect(() => {
+    const clearUserId = async () => {
+      await AsyncStorage.removeItem("user_id");
+      console.log("user_id cleared on app load");
+    };
+
+    clearUserId();
+  }, []);
+
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),

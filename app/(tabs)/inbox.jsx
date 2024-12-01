@@ -8,11 +8,14 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import SearchBox from "../../components/SearchBox";
 import MessageNotify from "../../components/MessageNotify";
 import { API_DATA } from "../../constants/data";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 const Inbox = () => {
   const dataCategory = [
@@ -67,11 +70,17 @@ const Inbox = () => {
 
   const getData = async () => {
     try {
-      setLoading(true);
-      const res = await fetch(API_DATA);
-      const data = await res.json();
-      // Lọc ra dữ liệu của sheet 'inbox' từ JSON trả về
-      setDataMessage(data.inbox || []);
+      const userId = await AsyncStorage.getItem("user_id");
+      if (!userId) {
+        Alert.alert("Error", "Please login to see your messages");
+        router.push("/log_in");
+      } else {
+        setLoading(true);
+        const res = await fetch(API_DATA);
+        const data = await res.json();
+        // Lọc ra dữ liệu của sheet 'inbox' từ JSON trả về
+        setDataMessage(data.inbox || []);
+      }
     } catch (error) {
       console.error(error);
       setDataInbox([]);
@@ -90,11 +99,23 @@ const Inbox = () => {
     getData();
   }, []);
 
+  const [searchQuery, setSearchQuery] = useState(""); // Lưu từ khóa tìm kiếm
+
+  // Lọc danh sách sản phẩm theo từ khóa
+  const handleSearchNameMessage = () => {
+    if (!searchQuery) return dataMessage; // Nếu không có từ khóa, hiển thị tất cả
+    return dataMessage.filter((message) =>
+      message.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  const filteredNameMessages = handleSearchNameMessage(); // Danh sách sản phẩm đã lọc
+
   return (
     <SafeAreaView>
-      <SearchBox />
+      <SearchBox setSearchQuery={setSearchQuery} />
       <View className="flex flex-row justify-between px-5 w-full">
-        {dataCategory.map((item) => (
+        {/* {dataCategory.map((item) => (
           <TouchableOpacity
             key={item.id}
             className="flex flex-col items-center pt-3 w-[50px] mb-1 mr-3 rounded-lg"
@@ -110,7 +131,7 @@ const Inbox = () => {
               {item.categoryName}
             </Text>
           </TouchableOpacity>
-        ))}
+        ))} */}
       </View>
       <Text className="px-3 pb-3 text-base font-pmedium">Messages</Text>
       <ScrollView
@@ -118,15 +139,15 @@ const Inbox = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        className="px-3 h-[350px]"
+        className="px-3 h-[480px]"
       >
         <View>
-        {loading && (
+          {loading && (
             <View style={styles.loading}>
               <ActivityIndicator size="large" color="#00bdd6" />
             </View>
           )}
-          {dataMessage.map((item) => (
+          {filteredNameMessages.map((item) => (
             <MessageNotify
               key={item.id}
               nameFrom={item.name}

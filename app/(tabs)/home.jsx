@@ -11,10 +11,11 @@ import React, { useState, useEffect } from "react";
 import SearchBox from "../../components/SearchBox";
 import CategorySelect from "../../components/CategorySelect";
 import CategoryCard from "../../components/CategoryCard";
-import CustomButton from "../../components/CustomButton";
+// import CustomButton from "../../components/CustomButton";
 import ProductCard from "../../components/ProductCard";
 import { Link, router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
+// import Countdown from "react-native-countdown-component";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -84,12 +85,12 @@ const Home = ({ navigation }) => {
       price: "100",
     },
   ];
-
   const onRefresh = async () => {
     setRefreshing(true);
     await getData();
     setRefreshing(false);
   };
+
   return (
     <SafeAreaView className="flex-1 bg-white pb-3">
       <ScrollView
@@ -99,52 +100,73 @@ const Home = ({ navigation }) => {
       >
         <SearchBox onFocus={() => navigation.navigate("SearchScreen")} />
 
-        <Text className="font-psemibold text-base ml-3 text-gray-400 pb-2">
-          Category
-        </Text>
-        <FlatList
-          data={dataCategory}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => {
-            return (
-              <CategorySelect
-                img={item.img}
-                categoryName={item.categoryName}
-                containerStylesImg={
-                  (className = "rounded-full bg-purple-100 shadow-sm")
-                }
-              />
-            );
-          }}
-          horizontal // Thêm thuộc tính horizontal để dàn các mục ra hàng ngang
-          showsHorizontalScrollIndicator={false} // Ẩn thanh cuộn ngang
-          className="pb-3 px-2"
-        />
+        <View className="mt-2">
+          <Text className="font-psemibold text-base ml-3 text-gray-400 pb-2">
+            Category
+          </Text>
+         
+          <FlatList
+            data={dataCategory}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => {
+              return (
+                <CategorySelect
+                  img={item.img}
+                  categoryName={item.categoryName}
+                  containerStylesImg={
+                    (className = "rounded-full bg-purple-100 shadow-sm")
+                  }
+                />
+              );
+            }}
+            horizontal // Thêm thuộc tính horizontal để dàn các mục ra hàng ngang
+            showsHorizontalScrollIndicator={false} // Ẩn thanh cuộn ngang
+            className="pb-3 px-2"
+          />
+        </View>
 
         <View className="px-3 py-2 w-full flex flex-col">
-          <Text className="font-psemibold text-base text-gray-400 pb-2">
-            Current sales
-          </Text>
-          <CategoryCard
-            categoryName="CategoryCard"
-            img="https://picsum.photos/200"
-            discount="10%"
-            CustomButton={() => (
-              <CustomButton
-                title="Buy now"
-                containerStyles="w-[100px]"
-                handlePress={() => router.push("../details/Cart")}
+          <View className="flex-row items-center mb-2">
+            <Text className="font-psemibold text-base text-gray-400 pb-2">
+              Flash sales today
+            </Text>
+            {/* <View className="bg-[#00bdd6] ml-2 px-1 rounded-lg flex-row items-center">
+              <AntDesign name="clockcircleo" size={20} color="white" />
+              <Countdown
+                until={1 * 24 * 60 * 60} // Thời gian đếm ngược (24 giờ)
+                size={12}
+                onFinish={() => alert("Flash sale ended!")}
+                digitStyle={{}}
+                digitTxtStyle={{ color: "white" }}
+                separatorStyle={{ color: "white" }}
+                showSeparator
+                timeLabels={["D", "H", "M", "S"]}
               />
-            )}
+            </View> */}
+          </View>
+
+          <CategoryCard
+            // categoryName="Best sales today"
+            img="https://picsum.photos/200"
+            discount="-50%"
+            // CustomButton={() => (
+            //   <CustomButton
+            //     title="Buy now"
+            //     containerStyles="w-[100px]"
+            //     handlePress={() => router.push("../details/Cart")}
+            //   />
+            // )}
           />
           <View className="flex flex-row items-center justify-between w-full mt-3">
             <CategoryCard
               containerStyles="flex-1 mr-2"
               img="https://picsum.photos/200"
+              discount={"-30%"}
             />
             <CategoryCard
               containerStyles="flex-1 ml-2"
               img="https://picsum.photos/200"
+              discount={"-20%"}
             />
           </View>
           <View className="flex items-center justify-center mt-3">
@@ -179,6 +201,7 @@ const Home = ({ navigation }) => {
               renderItem={({ item }) => {
                 return (
                   <ProductCard
+                    id={item.id}
                     img={item.img}
                     name={item.name}
                     countReviews={item.countReviews}

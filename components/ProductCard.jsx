@@ -15,7 +15,7 @@ const ProductCard = ({
   return (
     <Link
       href={{
-        pathname: "details/productDetail",
+        pathname: "../details/productDetail",
         params: { id, img, name, countReviews, price, status },
       }}
       asChild
@@ -24,7 +24,10 @@ const ProductCard = ({
         className={`bg-gray-200 ${containerStyles} py-3 mr-2 rounded-lg`}
       >
         <View className="w-full h-[150px] p-3">
-          <Image source={{uri:img}} className="w-full h-full object-contain" />
+          <Image
+            source={{ uri: img }}
+            className="w-full h-full object-contain"
+          />
         </View>
 
         <Text className="py-2 text-base font-psemibold px-3">{name}</Text>

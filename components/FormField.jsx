@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const FormField = ({
@@ -14,10 +14,18 @@ const FormField = ({
   placeholder,
   otherStyles,
   handleChangeText,
+  initialValue,
+
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    if (initialValue) {
+      handleChangeText(initialValue);
+    }
+  }, []);
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
@@ -26,12 +34,14 @@ const FormField = ({
       <View className="w-full h-16 px-4 bg-black-100 rounded-xl border-2 border-black-200 focus:border-[#00BDD6] flex flex-row items-center">
         <TextInput
           className="flex-1 text-black font-psemibold text-base"
-          value={value}
+          value={value || initialValue}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
           secureTextEntry={(title === "Password" && !showPassword) || (title === "Confirm password" && !showConfirmPassword) }
           {...props}
+          autoCapitalize="none"
+          
         />
 
         {title === "Password" && (

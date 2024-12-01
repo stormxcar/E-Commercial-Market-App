@@ -6,12 +6,13 @@ import ReactStars from "react-rating-stars-component";
 import { Link } from "expo-router";
 
 const CardList = ({
-  ratingChanged,
   containerStyles,
   img,
   name,
   price,
   imageStyles,
+  product,
+  handleAddToCart,
 }) => {
   return (
     <Link href="/details/productDetail" asChild>
@@ -63,8 +64,17 @@ const CardList = ({
                   </Text>
                 </View>
                 <View className="justify-end">
-                  <Link href="/details/Cart" asChild>
-                    <TouchableOpacity className="">
+                  <Link
+                    href={{
+                      pathname: "/details/Cart",
+                      params: { title: "Cart" },
+                    }}
+                    asChild
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleAddToCart(product)}
+                      className=""
+                    >
                       <MaterialIcons
                         name="add-circle"
                         size={26}

@@ -3,6 +3,8 @@ import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 
+// import ProductDetail from "./ProductShowDetail";
+
 const ProductCard = ({
   id,
   img,
@@ -11,12 +13,15 @@ const ProductCard = ({
   price,
   containerStyles,
   status,
+  displayType
 }) => {
+  
   return (
+  
     <Link
       href={{
-        pathname: "../details/productDetail",
-        params: { id, img, name, countReviews, price, status },
+        pathname: `../details/ProductDetail_${displayType}`,
+        params: { id, img, name, countReviews, price, status, displayType },
       }}
       asChild
     >

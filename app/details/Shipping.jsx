@@ -14,6 +14,8 @@ import Modal from "react-native-modal";
 import Timeline from "react-native-timeline-flatlist";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { API_DATA } from "../../constants/data";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 const Shipping = () => {
   const [shippingProducts, setShippingProducts] = useState([]);
@@ -128,25 +130,52 @@ const Shipping = () => {
     );
   };
 
+  const [userId, setUserId] = useState(null);
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem("user_id");
+        setUserId(storedUserId); // Cập nhật userId vào state
+      } catch (error) {
+        console.error("Error checking user_id:", error);
+      }
+    };
+
+    checkLogin();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
+      <ScrollView contentContainerStyle={{}}>
         {/* Hiển thị danh sách sản phẩm mà trạng thái của nó đang là shipping */}
-        {shippingProducts.map((product, index) =>
-          product.status === "shipping" ? (
-            <CardCheckout
-              key={index}
-              name={product.name}
-              price={product.price}
-              quantity={product.quantity}
-              img={product.img} // Ensure you provide correct image path
-              status={product.status}
-              ishowTrackOrder={true}
-            />
-          ) : null
+        {!userId ? (
+          <View className="p-3 bg-white rounded-md">
+            <Text className="text-center font-psemibold text-lg">
+              Please login to see your shipping
+            </Text>
+            <TouchableOpacity onPress={() => router.push("/log_in")}>
+              <Text className="text-center font-psemibold text-lg text-[#00BDD6]">
+                Login now
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            {shippingProducts.map((product, index) =>
+              product.status === "shipping" ? (
+                <CardCheckout
+                  key={index}
+                  name={product.name}
+                  price={product.price}
+                  quantity={product.quantity}
+                  img={product.img} // Ensure you provide correct image path
+                  status={product.status}
+                  ishowTrackOrder={true}
+                />
+              ) : null
+            )}
+          </View>
         )}
-
-        
       </ScrollView>
     </SafeAreaView>
   );

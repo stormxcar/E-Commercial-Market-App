@@ -18,7 +18,6 @@ import { Link } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { v4 as uuidv4 } from "uuid";
 
-
 const ProductList = () => {
   const [dataProductCard, setDataProductCard] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -53,11 +52,29 @@ const ProductList = () => {
     setLoading(false);
   };
 
-  const images = [
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/301",
-    "https://picsum.photos/200/302",
-  ];
+  // get image of product sale (discount > 50 ) from API_DATA
+
+  const getSaleProductImages = () => {
+    return dataProductCard
+      .filter((product) => product.discount > 50)
+      .map((product) => {
+        try {
+          // Nếu 'img' là một chuỗi JSON, parse nó
+          return JSON.parse(product.img)[0]; // Lấy URL đầu tiên
+        } catch {
+          return product.img; // Nếu không phải JSON, trả về trực tiếp
+        }
+      });
+  };
+
+  const [images, setImages] = useState([]); // Initialize as an empty array
+
+  useEffect(() => {
+    // Fetch images after dataProductCard is populated
+    if (dataProductCard.length > 0) {
+      setImages(getSaleProductImages());
+    }
+  }, [dataProductCard]);
 
   const [visibleProducts, setVisibleProducts] = useState(6); // Initial number of products to display
 
@@ -69,15 +86,17 @@ const ProductList = () => {
     try {
       const imgUrl =
         typeof product.img === "string" ? product.img : product.img.uri;
-  
+
       // Fetch giỏ hàng hiện tại
       const response_1 = await fetch(API_DATA);
       const result = await response_1.json();
       const data_cart = result.cart || []; // Giả sử API trả về `cart`
-  
+
       // Kiểm tra sản phẩm có trong giỏ chưa
-      const existingProduct = data_cart.find((item) => item.name === product.name);
-  
+      const existingProduct = data_cart.find(
+        (item) => item.name === product.name
+      );
+
       if (existingProduct) {
         // Nếu đã có, cập nhật số lượng
         const response = await fetch(`${API_DATA}/${existingProduct.id}`, {
@@ -90,9 +109,12 @@ const ProductList = () => {
             quantity: existingProduct.quantity + 1, // Tăng số lượng
           }),
         });
-  
+
         if (response.ok) {
-          Alert.alert("Thông báo", "Đã cập nhật số lượng sản phẩm trong giỏ hàng!");
+          Alert.alert(
+            "Thông báo",
+            "Đã cập nhật số lượng sản phẩm trong giỏ hàng!"
+          );
         } else {
           throw new Error("Cập nhật sản phẩm thất bại!");
         }
@@ -115,10 +137,10 @@ const ProductList = () => {
           }),
         });
 
-        console.log('====================================');
+        console.log("====================================");
         console.log(product.status);
-        console.log('====================================');
-  
+        console.log("====================================");
+
         if (response.ok) {
           Alert.alert("Thành công", "Sản phẩm đã được thêm vào giỏ hàng!");
         } else {
@@ -130,7 +152,6 @@ const ProductList = () => {
       Alert.alert("Lỗi", error.message);
     }
   };
-  
 
   return (
     <SafeAreaView className="px-3 py-5">
@@ -141,16 +162,21 @@ const ProductList = () => {
         }
       >
         <View className="w-full h-[200px] rounded-lg overflow-hidden">
-          <Swiper showsButtons={true} autoplay={true} autoplayTimeout={3}>
-            {images.map((uri, index) => (
-              <View className="flex-1 justify-center items-center" key={index}>
-                <Image
-                  source={{ uri }}
-                  className="w-[100%] h-[100%]"
-                  resizeMode="cover"
-                />
-              </View>
-            ))}
+          <Swiper showsButtons={true} autoplay={true} autoplayTimeout={4}>
+            {images && images.length > 0
+              ? images.map((uri, index) => (
+                  <View
+                    className="flex-1 justify-center items-center"
+                    key={index}
+                  >
+                    <Image
+                      source={{ uri }}
+                      className="w-[100%] h-[100%]"
+                      resizeMode="cover"
+                    />
+                  </View>
+                ))
+              : null}
           </Swiper>
         </View>
 

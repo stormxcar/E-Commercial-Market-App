@@ -10,10 +10,10 @@ import React, {useEffect} from "react";
 import ProductShowDetail from "../../components/ProductShowDetail";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const ProductDetail = () => {
+const ProductDetail_1 = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { id, img, name, countReviews, price, status } = route.params;
+  const { id, img, name, countReviews, price, status , displayType, images} = route.params;
   const data = [{ key: "header" }, { key: "content" }];
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const ProductDetail = () => {
           if (item.key === "header") {
             return <></>;
           } else {
-            return <ProductShowDetail product={{ id, img, name, countReviews, price, status }}/>;
+            return <ProductShowDetail product={{ id, img, name, countReviews, price, status, images }}/>;
           }
         }}
       />
@@ -39,6 +39,6 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetail_1;
 
 const styles = StyleSheet.create({});

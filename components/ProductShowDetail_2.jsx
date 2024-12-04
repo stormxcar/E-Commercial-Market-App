@@ -10,13 +10,15 @@ import {
   Switch,
   Animated,
   TextInput,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProductCard from "./ProductCard";
 import Collapsible from "react-native-collapsible";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProgressBar = ({ percentage, label }) => {
   return (
@@ -33,7 +35,7 @@ const ProgressBar = ({ percentage, label }) => {
   );
 };
 
-const ProductDetail_2 = () => {
+const ProductDetail_2 = (product) => {
   // const dataProduct = [
   //   {
   //     id: 1,
@@ -145,9 +147,23 @@ const ProductDetail_2 = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
+  const [userId, setUserId] = useState(null);
+
+  const handleBuyNow = async (product) => {
+    const userId = await AsyncStorage.getItem("user_id");
+
+    if (!userId) {
+      Alert.alert("Notification", "Please login to continue shopping", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Login", onPress: () => router.push("/log_in") },
+      ]);
+      return;
+    }
+  };
+
   return (
-    <SafeAreaView>
-      <ScrollView className="px-3 py-5 flex flex-col">
+    <SafeAreaView className="max-w-[100vh]">
+      <ScrollView className="px-3 py-5 mb-10 flex flex-col">
         <View className="w-full border-b-[1px] border-gray-300 pb-2 mb-2">
           <View className="w-full h-[200px] mb-2">
             <Image
@@ -245,7 +261,7 @@ const ProductDetail_2 = () => {
         </View>
 
         <View>
-          <View className="flex flex-row justify-between w-full items-center mb-4">
+          {/* <View className="flex flex-row justify-between w-full items-center mb-4">
             <Text className="text-base font-psemibold">Quantity</Text>
           </View>
 
@@ -277,7 +293,7 @@ const ProductDetail_2 = () => {
                 </View>
               </View>
             </View>
-          </View>
+          </View> */}
 
           <View className="pt-4 pb-5 flex flex-row items-center justify-between border-b-2 my-3">
             <Text className="text-base font-psemibold">Size guide</Text>
@@ -390,15 +406,18 @@ const ProductDetail_2 = () => {
             </View>
           </Collapsible>
         </View>
-
-        <Link href="/details/Cart" asChild>
-          <TouchableOpacity className="bg-[#00bdd6] flex flex-row items-center justify-center my-4 rounded-sm p-3">
-            <Ionicons name="cart-outline" size={24} color="white" />
-            <Text className="font-pregular text-base text-white ml-2">
-              Add to cart
+        <View className="flex flex-row w-full items-center justify-between">
+         
+          <TouchableOpacity
+            onPress={handleBuyNow}
+            className="bg-[#00bdd6] flex flex-row items-center justify-center my-4 rounded-sm p-3 flex-1"
+          >
+            {/* <Ionicons name="cart-outline" size={24} color="white" /> */}
+            <Text className="font-pmedium text-base text-white ml-2">
+              Buy now
             </Text>
           </TouchableOpacity>
-        </Link>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

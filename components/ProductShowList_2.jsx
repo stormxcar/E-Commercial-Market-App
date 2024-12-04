@@ -9,7 +9,7 @@ import {
   FlatList,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardList from "./CardList";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Swiper from "react-native-swiper";
@@ -17,7 +17,7 @@ import ProductCard from "./ProductCard";
 import { Link } from "expo-router";
 import { API_DATA } from "../constants/data";
 import { v4 as uuidv4 } from "uuid";
-
+import { useRoute } from "@react-navigation/native";
 
 const ProductShowList_2 = ({ searchQuery }) => {
   // const dataProductCard = [
@@ -47,45 +47,82 @@ const ProductShowList_2 = ({ searchQuery }) => {
   //   },
   //   // Add more products as needed
   // ];
-  const dataProductCard = [
-    {
-      id: 1,
-      name: "Iphone",
-      img: "https://picsum.photos/200",
-      price: 899,
-      sales: 50,
-      matched: 80,
-      popular: 90,
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      img: "https://picsum.photos/200",
-      price: 899,
-      sales: 30,
-      matched: 70,
-      popular: 85,
-    },
-    {
-      id: 3,
-      name: "Tablet",
-      img: "https://picsum.photos/200",
-      price: 789,
-      sales: 70,
-      matched: 90,
-      popular: 95,
-    },
-    {
-      id: 4,
-      name: "Headphone",
-      img: "https://picsum.photos/200",
-      price: 999,
-      sales: 90,
-      matched: 60,
-      popular: 80,
-    },
-    // Add more products as needed
-  ];
+  // const dataProductCard = [
+  //   {
+  //     id: 1,
+  //     name: "Iphone",
+  //     img: "https://picsum.photos/200",
+  //     price: 899,
+  //     sales: 50,
+  //     matched: 80,
+  //     popular: 90,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Smart Watch",
+  //     img: "https://picsum.photos/200",
+  //     price: 899,
+  //     sales: 30,
+  //     matched: 70,
+  //     popular: 85,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Tablet",
+  //     img: "https://picsum.photos/200",
+  //     price: 789,
+  //     sales: 70,
+  //     matched: 90,
+  //     popular: 95,
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Headphone",
+  //     img: "https://picsum.photos/200",
+  //     price: 999,
+  //     sales: 90,
+  //     matched: 60,
+  //     popular: 80,
+  //   },
+  //   // Add more products as needed
+  // ];
+
+  const route = useRoute();
+  const { id } = route.params;
+  const [dataProductCard, setDataProductCard] = useState([]);
+
+  console.log("====================================");
+  console.log("id cate: ", id);
+  console.log("====================================");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(API_DATA);
+        const data = await res.json();
+        console.log("Received data:", data.product); // Log the entire data object
+        console.log("Filtering with id:", id); // Log the id value
+
+        if (data.product && Array.isArray(data.product)) {
+          const filteredProducts = data.product.filter(
+            (product) => product.category_id === Number(id) // Ép kiểu id về number
+          );
+
+          console.log("Filtered products:", filteredProducts); // Log the filtered products
+          setDataProductCard(filteredProducts);
+        } else {
+          console.error(
+            "Invalid data structure received from API. 'data.product' is not an array."
+          );
+          setDataProductCard(data.product);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setDataProductCard([]);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const dataProduct = [
     {

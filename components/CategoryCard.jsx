@@ -11,16 +11,26 @@ import React from "react";
 import { Link } from "expo-router";
 
 const CategoryCard = ({
-  categoryName,
+  id,
+  name,
   discount,
   img,
   CustomButton,
   containerStyles,
   onPress,
+  price,
+  priceInit,
+  displayType
 }) => {
   return (
     <View className={`flex-1 ${containerStyles} `}>
-      <Link href="../details/ProductDetail_2" asChild>
+      <Link
+      href={{
+        pathname: `../details/ProductDetail_${displayType}`,
+        params: { id, img, name, price, displayType },
+      }}
+      asChild
+    >
         <TouchableOpacity
           onPress={onPress}
           className="rounded-lg w-full shadow-xl border-[1px] border-gray-100"
@@ -29,11 +39,11 @@ const CategoryCard = ({
             source={{ uri: img }}
             className="w-full h-[200px] rounded-t-lg object-cover overflow-hidden shadow-2xl"
           >
-            {categoryName ? (
+            {/* {name ? (
               <Text className="font-psemibold text-[#00BDD6] text-base pt-10 px-5">
-                {categoryName}
+                {name}
               </Text>
-            ) : null}
+            ) : null} */}
             {discount ? (
               <View className="bg-cyan-100 absolute top-0 right-0 w-[100px] p-1">
                 <Text className="font-pbold text-red-600 text-base px-5">
@@ -46,7 +56,7 @@ const CategoryCard = ({
                 <CustomButton />
               </View>
             ) : null}
-            {!categoryName && !discount && !CustomButton ? (
+            {!name && !discount && !CustomButton ? (
               <View className="h-full w-full" />
             ) : null}
           </ImageBackground>
@@ -56,7 +66,7 @@ const CategoryCard = ({
                 $120
               </Text>
               <Text className="text-center font-pbold text-base text-[#00BDD6]">
-                $199
+                ${price}
               </Text>
             </View>
             <View className="flex-1 rounded-b-lg">

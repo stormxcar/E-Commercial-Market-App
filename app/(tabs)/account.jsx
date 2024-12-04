@@ -11,11 +11,12 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import Modal from "react-native-modal";
 import Timeline from "react-native-timeline-flatlist";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_DATA } from "../../constants/data";
 
 const Account = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -94,11 +95,11 @@ const Account = () => {
       img: "https://picsum.photos/200",
       categoryName: "E-voucher",
     },
-    {
-      id: 6,
-      img: "https://picsum.photos/200",
-      categoryName: "Member",
-    },
+    // {
+    //   id: 6,
+    //   img: "https://picsum.photos/200",
+    //   categoryName: "Member",
+    // },
   ];
 
   const recentOrders = [
@@ -151,6 +152,28 @@ const Account = () => {
     checkLogin();
   }, []);
 
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch(API_DATA);
+        const data = await response.json();
+
+        const user = data.account.find((user) => user.user_id == userId); // Sửa đổi điều kiện tìm kiếm
+
+        // console.log('====================================');
+        // console.log("data user found: ",user);
+        // console.log('====================================');
+
+        setUserName(user?.user_name || ""); // Lấy user_name thay vì name
+      } catch (error) {
+        console.error("Error fetching user name:", error);
+      }
+    };
+    fetchUserName();
+  }, [userId]);
+
   return (
     <SafeAreaView className="flex-1">
       <ScrollView
@@ -169,9 +192,7 @@ const Account = () => {
             <View>
               <Link href="/details/UpdateProfile" asChild>
                 <TouchableOpacity>
-                  <Text className="text-base font-psemibold">
-                    Nguyen Bao Kha
-                  </Text>
+                  <Text className="text-base font-psemibold">{userName}</Text>
                 </TouchableOpacity>
               </Link>
               <Text className="text-base font-pregular text-[#00bdd6]">
@@ -207,7 +228,7 @@ const Account = () => {
 
             return (
               <React.Fragment key={item.id}>
-                {item.categoryName === "Member" ? (
+                {item.categoryName === "Payment Methods" ? (
                   <TouchableOpacity
                     className="flex flex-col items-center justify-center p-3 w-[100px] border-[1px] border-gray-300 mb-3 mr-3 rounded-lg"
                     onPress={toggleModal}
@@ -258,35 +279,40 @@ const Account = () => {
           onBackdropPress={toggleModal}
           className="m-0 justify-end"
         >
-          <View className="bg-white rounded-t-3xl h-auto p-4 w-full items-center">
-            <View className="w-full flex justify-between items-center flex-row">
-              <Text className="w-full text-base font-psemibold border-b-[1px] border-gray-300 py-3">
-                Member Information
+          {!userId ? (
+            <View className="p-5 bg-white rounded-md">
+              <Text className="text-center font-psemibold text-lg">
+                Please login to see your payment method
               </Text>
-            </View>
-            <View className="w-full mt-4">
-              <View className="flex flex-row items-center mb-2">
-                <Text className="text-base font-pregular flex-1">
-                  Member ID
+              {/* <TouchableOpacity onPress={() => router.push("/log_in")}>
+                <Text className="text-center font-psemibold text-lg text-[#00BDD6]">
+                  Login now
                 </Text>
-                <Text className="flex-1 text-sm font-pregular text-gray-500">
-                  2938
+              </TouchableOpacity> */}
+            </View>
+          ) : (
+            <View className="bg-white rounded-t-3xl h-auto p-4 w-full items-center">
+              <View className="w-full flex justify-between items-center flex-row">
+                <Text className="w-full text-base font-psemibold border-b-[1px] border-gray-300 py-3">
+                  Your Payment methods
                 </Text>
               </View>
-              <View className="flex flex-row items-center mb-2">
-                <Text className="text-base font-pregular flex-1">Level</Text>
-                <Text className="flex-1 text-sm font-pregular text-gray-500">
-                  1
-                </Text>
+              <View className="w-full mt-4">
+                <View className="flex flex-row items-center mb-2">
+                  <Text className="text-base font-pregular flex-1">Paypal</Text>
+                  <Text className="flex-1 text-sm font-pregular text-gray-500">
+                    added
+                  </Text>
+                </View>
               </View>
+              <TouchableOpacity
+                onPress={toggleModal}
+                className="bg-[#00BDD6] p-2 rounded-lg mt-3"
+              >
+                <Text className="text-sm font-pregular text-white">Done</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={toggleModal}
-              className="bg-[#00BDD6] p-2 rounded-lg mt-3"
-            >
-              <Text className="text-sm font-pregular text-white">Done</Text>
-            </TouchableOpacity>
-          </View>
+          )}
         </Modal>
 
         {/* Recent Orders */}

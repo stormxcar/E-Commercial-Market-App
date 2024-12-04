@@ -20,76 +20,122 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
+import { API_DATA } from "../../constants/data";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const Home = ({ navigation }) => {
   // const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [dataProduct, setDataProduct] = useState([]);
 
-  const dataCategory = [
-    {
-      id: 1,
-      img: require("../../assets/images/category_phone.png"),
-      categoryName: "Electronics",
-      discount: "10%",
-    },
-    {
-      id: 2,
-      img: require("../../assets/images/category_shoe.png"),
-      categoryName: "Fashion",
-      discount: "20%",
-    },
-    {
-      id: 3,
-      img: require("../../assets/images/category_beauty.png"),
-      categoryName: "Beauty",
-      discount: "30%",
-    },
-    {
-      id: 4,
-      img: require("../../assets/images/category_fruit.png"),
-      categoryName: "Fresh Fruits",
-      discount: "40%",
-    },
-  ];
+  // const dataCategory = [
+  //   {
+  //     id: 1,
+  //     img: require("../../assets/images/category_phone.png"),
+  //     categoryName: "Electronics",
+  //     discount: "10%",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: require("../../assets/images/category_shoe.png"),
+  //     categoryName: "Fashion",
+  //     discount: "20%",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: require("../../assets/images/category_beauty.png"),
+  //     categoryName: "Beauty",
+  //     discount: "30%",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: require("../../assets/images/category_fruit.png"),
+  //     categoryName: "Fresh Fruits",
+  //     discount: "40%",
+  //   },
+  // ];
 
-  const dataProduct = [
-    {
-      id: 1,
-      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
-      name: "Sneaker",
-      countReviews: "10",
-      price: "100",
-    },
-    {
-      id: 2,
-      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
-      name: "Tablet",
-      countReviews: "10",
-      price: "100",
-    },
-    {
-      id: 3,
-      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
-      name: "Kid cloth",
-      countReviews: "10",
-      price: "100",
-    },
-    {
-      id: 4,
-      img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
-      name: "Green avocado",
-      countReviews: "10",
-      price: "100",
-    },
-  ];
+  // const dataProduct = [
+  //   {
+  //     id: 1,
+  //     img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
+  //     name: "Sneaker",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
+  //     name: "Tablet",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
+  //     name: "Kid cloth",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: "https://res.cloudinary.com/dzwjgfd7t/image/upload/v1731204792/ecommercial_market_image/category_shoe_nsq8mw.png",
+  //     name: "Green avocado",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  // ];
+  const [dataCategory, setDataCategory] = useState([]);
+
+  useEffect(() => {
+    const fetchDataCategory = async () => {
+      try {
+        const res = await fetch(API_DATA);
+        const data = await res.json();
+        setDataCategory(data?.category || []);
+      } catch (error) {
+        console.log(error);
+        setDataCategory([]);
+      }
+    };
+
+    fetchDataCategory();
+  }, []);
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(API_DATA);
+      const data = await res.json();
+
+      // console.log("====================================");
+      // console.log("data product: ", data.product);
+      // console.log("====================================");
+
+      setDataProduct(data.product || []);
+    } catch (error) {
+      console.log(error);
+      setDataProduct([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const onRefresh = async () => {
     setRefreshing(true);
     await getData();
     setRefreshing(false);
   };
+
+  // get list product from API_DATA that discount > 50
+  const dataProductDiscount = dataProduct.filter((item) => item.discount > 50);
 
   return (
     <SafeAreaView className="flex-1 bg-white pb-3">
@@ -104,15 +150,16 @@ const Home = ({ navigation }) => {
           <Text className="font-psemibold text-base ml-3 text-gray-400 pb-2">
             Category
           </Text>
-         
+
           <FlatList
             data={dataCategory}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => {
               return (
                 <CategorySelect
+                  id={item.id}
                   img={item.img}
-                  categoryName={item.categoryName}
+                  categoryName={item.name}
                   containerStylesImg={
                     (className = "rounded-full bg-purple-100 shadow-sm")
                   }
@@ -145,38 +192,59 @@ const Home = ({ navigation }) => {
             </View> */}
           </View>
 
-          <CategoryCard
-            // categoryName="Best sales today"
-            img="https://picsum.photos/200"
-            discount="-50%"
-            // CustomButton={() => (
-            //   <CustomButton
-            //     title="Buy now"
-            //     containerStyles="w-[100px]"
-            //     handlePress={() => router.push("../details/Cart")}
-            //   />
-            // )}
-          />
-          <View className="flex flex-row items-center justify-between w-full mt-3">
-            <CategoryCard
-              containerStyles="flex-1 mr-2"
-              img="https://picsum.photos/200"
-              discount={"-30%"}
-            />
-            <CategoryCard
-              containerStyles="flex-1 ml-2"
-              img="https://picsum.photos/200"
-              discount={"-20%"}
-            />
+          <View className="flex">
+            {" "}
+            {/* Container for top and bottom rows */}
+            {dataProductDiscount.length > 0 && (
+              <View className="flex-row justify-between">
+                {" "}
+                {/* Top row */}
+                {dataProductDiscount
+                  .slice(0, Math.min(2, dataProductDiscount.length))
+                  .map((item, index) => (
+                    <View key={index} className="w-1/2 mb-2">
+                      <CategoryCard
+                        img={item.img}
+                        discount={`${item.discount}%`}
+                        name={item.name}
+                        price={item.price}
+                        displayType={item.display}
+                      />
+                    </View>
+                  ))}
+              </View>
+            )}
+            {dataProductDiscount.length > 2 && (
+              <View className="flex-row justify-between mt-2">
+                {" "}
+                {/* Bottom row */}
+                {dataProductDiscount
+                  .slice(2, Math.min(4, dataProductDiscount.length))
+                  .map((item, index) => (
+                    <View key={index} className="w-full mb-2">
+                      <CategoryCard
+                        img={item.img}
+                        discount={`${item.discount}%`}
+                        name={item.name}
+                        price={item.price}
+                        displayType={item.display}
+                      />
+                    </View>
+                  ))}
+              </View>
+            )}
           </View>
+
           <View className="flex items-center justify-center mt-3">
-            <Link href="../details/ProductList" asChild>
-              <TouchableOpacity className="p-2 bg-[#00bdd6] rounded-md">
-                <Text className="text-white font-pmedium text-base">
-                  See more
-                </Text>
-              </TouchableOpacity>
-            </Link>
+            {dataProductDiscount.length > 3 ? (
+              <Link href="../details/ProductList" asChild>
+                <TouchableOpacity className="p-2 bg-[#00bdd6] rounded-md">
+                  <Text className="text-white font-pmedium text-base">
+                    See more
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            ) : null}
           </View>
         </View>
 
@@ -207,6 +275,7 @@ const Home = ({ navigation }) => {
                     countReviews={item.countReviews}
                     price={item.price}
                     productId={item.id}
+                    displayType={item.display}
                     containerStyles={"w-[180px]"}
                   />
                 );

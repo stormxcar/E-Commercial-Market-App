@@ -50,9 +50,9 @@ const ProductDetail = (product) => {
   const [dataCart, setDataCart] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  // console.log("====================================");
-  // console.log("product", product);
-  // console.log("====================================");
+  console.log("====================================");
+  console.log("product", product);
+  console.log("====================================");
 
   const getData = async () => {
     try {
@@ -128,9 +128,9 @@ const ProductDetail = (product) => {
       text2: "Mọi cập nhật mới nhất về đơn hàng sẽ được thông báo đến bạn.",
     });
   };
-  console.log("====================================");
-  console.log("product", product);
-  console.log("====================================");
+  // console.log("====================================");
+  // console.log("product", product);
+  // console.log("====================================");
 
   const handleAddToCart = async (product) => {
     try {
@@ -207,18 +207,40 @@ const ProductDetail = (product) => {
   // };
 
   const [selectedImage, setSelectedImage] = useState(
-    "https://picsum.photos/200"
+   product.product.img
   );
 
-  const images = [
-    "https://picsum.photos/200",
-    "https://picsum.photos/201",
-    "https://picsum.photos/202",
-    "https://picsum.photos/203",
-    "https://picsum.photos/204",
-    "https://picsum.photos/205",
-    "https://picsum.photos/206",
-  ];
+  console.log('====================================');
+  console.log("images: ",product.product.images);
+  console.log('====================================');
+
+  const [images, setImages] = useState([]);
+
+  // useEffect(() => {
+  //   const fetchDataImages = async () => {
+  //     const res = await fetch(API_DATA);
+  //     const data = await res.json();
+
+  //     const urls = JSON.parse(data.product);
+
+  //     console.log('====================================');
+  //     console.log("urls : ",urls);
+  //     console.log('====================================');
+
+  //   }
+
+  //   fetchDataImages();
+  // },[])
+
+  // const images = [
+  //   "https://picsum.photos/200",
+  //   "https://picsum.photos/201",
+  //   "https://picsum.photos/202",
+  //   "https://picsum.photos/203",
+  //   "https://picsum.photos/204",
+  //   "https://picsum.photos/205",
+  //   "https://picsum.photos/206",
+  // ];
 
   // const handleShare = async () => {
   //   const shareOptions = {
@@ -352,9 +374,9 @@ const ProductDetail = (product) => {
           <View className="flex flex-row justify-between my-3 items-center">
             <View className="flex flex-row items-center gap-2">
               <Text className="text-base font-psemibold line-through text-gray-400">
-                {product.price}
+                {product.product.price}
               </Text>
-              <Text className="text-base font-psemibold">${product.price}</Text>
+              <Text className="text-base font-psemibold">${product.product.price}</Text>
               <Text className="text-base font-psemibold text-[#00BDD6]">
                 -10%
               </Text>

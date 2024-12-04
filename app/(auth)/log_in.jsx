@@ -100,7 +100,7 @@ const LogIn = () => {
           otherStyles="mt-7"
           keyboardType="email-address"
           // autoCapitalize="none"
-          initialValue="nguyen23@gmail.com"
+          // initialValue="nguyen23@gmail.com"
         />
         <FormField
           title="Password"

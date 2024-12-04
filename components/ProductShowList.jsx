@@ -52,25 +52,32 @@ const ProductList = () => {
     setLoading(false);
   };
 
-  // get image of product sale (discount > 50 ) from API_DATA
+  const [images, setImages] = useState([]); // Khởi tạo mảng ảnh trống
 
   const getSaleProductImages = () => {
     return dataProductCard
       .filter((product) => product.discount > 50)
       .map((product) => {
-        try {
-          // Nếu 'img' là một chuỗi JSON, parse nó
-          return JSON.parse(product.img)[0]; // Lấy URL đầu tiên
-        } catch {
-          return product.img; // Nếu không phải JSON, trả về trực tiếp
+        // More robust null and undefined checks
+        if (product?.img && typeof product.img === "string") {
+          try {
+            const parsedImages = JSON.parse(product.img);
+            return Array.isArray(parsedImages) && parsedImages.length > 0
+              ? parsedImages[0]
+              : null;
+          } catch (e) {
+            // Handle JSON parsing errors more gracefully
+            console.error("Error parsing image JSON:", e, product.img);
+            return product.img; // Return original string if parsing fails
+          }
         }
-      });
+        return null;
+      })
+      .filter((img) => img !== null && img !== undefined); // Filter out null and undefined values
   };
 
-  const [images, setImages] = useState([]); // Initialize as an empty array
-
   useEffect(() => {
-    // Fetch images after dataProductCard is populated
+    // Cập nhật danh sách ảnh sau khi dataProductCard thay đổi
     if (dataProductCard.length > 0) {
       setImages(getSaleProductImages());
     }
@@ -153,6 +160,10 @@ const ProductList = () => {
     }
   };
 
+  // console.log('====================================');
+  // console.log("data product card:",dataProductCard);
+  // console.log('====================================');
+
   return (
     <SafeAreaView className="px-3 py-5">
       <ScrollView
@@ -163,20 +174,26 @@ const ProductList = () => {
       >
         <View className="w-full h-[200px] rounded-lg overflow-hidden">
           <Swiper showsButtons={true} autoplay={true} autoplayTimeout={4}>
-            {images && images.length > 0
-              ? images.map((uri, index) => (
-                  <View
-                    className="flex-1 justify-center items-center"
-                    key={index}
-                  >
+            {images.length > 0 ? (
+              images.map((uri, index) => (
+                <View
+                  className="flex-1 justify-center items-center"
+                  key={index}
+                >
+                  {uri ? ( // Check if uri is not null or undefined before rendering
                     <Image
                       source={{ uri }}
                       className="w-[100%] h-[100%]"
                       resizeMode="cover"
                     />
-                  </View>
-                ))
-              : null}
+                  ) : (
+                    <Text>Sale product no available</Text> // Or a placeholder image
+                  )}
+                </View>
+              ))
+            ) : (
+              <Text>No sale images available</Text> // Or a placeholder component
+            )}
           </Swiper>
         </View>
 
@@ -213,6 +230,9 @@ const ProductList = () => {
                       name={item.name}
                       price={item.price}
                       product={item}
+                      ratingNumbers={item.number_count_rating}
+                      discount={item.discount}
+                      displayType={item.display}
                       handleAddToCart={handleAddToCart}
                     />
                   </View>
@@ -259,6 +279,8 @@ const ProductList = () => {
                       img={item.img}
                       name={item.name}
                       price={item.price}
+                      discount={item.discount}
+                      ratingNumbers={item.number_count_rating}
                     />
                   </View>
                 ))}

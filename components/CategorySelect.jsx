@@ -8,10 +8,11 @@ const CategorySelect = ({
   categoryName,
   containerStyles,
   containerStylesImg,
+  discount
 }) => {
   return (
     <Link
-      href={{ pathname: "details/ProductList_2", params: { categoryName, id } }}
+      href={{ pathname: "details/ProductList_2", params: { categoryName, id ,discount} }}
       asChild
     >
       <TouchableOpacity

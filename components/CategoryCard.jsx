@@ -27,7 +27,7 @@ const CategoryCard = ({
       <Link
       href={{
         pathname: `../details/ProductDetail_${displayType}`,
-        params: { id, img, name, price, displayType },
+        params: { id, img, name, price, displayType ,discount},
       }}
       asChild
     >
@@ -37,7 +37,7 @@ const CategoryCard = ({
         >
           <ImageBackground
             source={{ uri: img }}
-            className="w-full h-[200px] rounded-t-lg object-cover overflow-hidden shadow-2xl"
+            className="w-full h-[200px] rounded-t-lg object-contain overflow-hidden shadow-2xl"
           >
             {/* {name ? (
               <Text className="font-psemibold text-[#00BDD6] text-base pt-10 px-5">

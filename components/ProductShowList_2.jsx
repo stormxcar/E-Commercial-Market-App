@@ -124,36 +124,36 @@ const ProductShowList_2 = ({ searchQuery }) => {
     fetchData();
   }, [id]);
 
-  const dataProduct = [
-    {
-      id: 1,
-      img: "https://picsum.photos/200",
-      name: "Sneaker",
-      countReviews: "10",
-      price: "100",
-    },
-    {
-      id: 2,
-      img: "https://picsum.photos/200",
-      name: "Tablet",
-      countReviews: "10",
-      price: "100",
-    },
-    {
-      id: 3,
-      img: "https://picsum.photos/200",
-      name: "Kid cloth",
-      countReviews: "10",
-      price: "100",
-    },
-    {
-      id: 4,
-      img: "https://picsum.photos/200",
-      name: "Green avocado",
-      countReviews: "10",
-      price: "100",
-    },
-  ];
+  // const dataProduct = [
+  //   {
+  //     id: 1,
+  //     img: "https://picsum.photos/200",
+  //     name: "Sneaker",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: "https://picsum.photos/200",
+  //     name: "Tablet",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: "https://picsum.photos/200",
+  //     name: "Kid cloth",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: "https://picsum.photos/200",
+  //     name: "Green avocado",
+  //     countReviews: "10",
+  //     price: "100",
+  //   },
+  // ];
 
   const [selectedButton, setSelectedButton] = useState("Best sales");
   const [isPriceAscending, setIsPriceAscending] = useState(true);
@@ -169,12 +169,42 @@ const ProductShowList_2 = ({ searchQuery }) => {
     setSelectedButton(button);
   };
 
+  const [dataProduct, setDataProduct] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
   const getFilteredProductsBySale = () => {
-    return dataProduct.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    // Lọc từ state `dataProduct`
+    const filtered = dataProduct.filter(
+      (product) =>
+        product.discount > 50 && // Lọc sản phẩm có discount > 50
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) // Kiểm tra tên theo searchQuery
     );
+    setFilteredProducts(filtered);
   };
-  const getDataProductBySale = getFilteredProductsBySale();
+
+  useEffect(() => {
+    // Tải dữ liệu từ API
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(API_DATA);
+        const data = await res.json();
+
+        console.log("Raw data from API:", data.product);
+        setDataProduct(data.product || []); // Cập nhật state
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []); // Chạy một lần khi component được render
+
+  useEffect(() => {
+    // Lọc dữ liệu mỗi khi `dataProduct` hoặc `searchQuery` thay đổi
+    if (dataProduct.length > 0) {
+      getFilteredProductsBySale();
+    }
+  }, [dataProduct, searchQuery]); // Theo dõi các dependencies này
 
   const getFilteredProductsBySelection = () => {
     let filteredProducts = dataProductCard.filter((product) =>
@@ -300,7 +330,7 @@ const ProductShowList_2 = ({ searchQuery }) => {
         </View>
         <View className="flex flex-row justify-between items-centerw-full h-auto">
           <FlatList
-            data={getDataProductBySale}
+            data={filteredProducts}
             keyExtractor={(item) => item.id}
             ld
             renderItem={({ item }) => {
@@ -308,9 +338,10 @@ const ProductShowList_2 = ({ searchQuery }) => {
                 <ProductCard
                   img={item.img}
                   name={item.name}
-                  countReviews={item.countReviews}
+                  countReviews={item.number_count_rating}
                   price={item.price}
                   productId={item.id}
+                  discount={item.discount}
                   containerStyles={"w-[150px]"}
                 />
               );
@@ -381,6 +412,8 @@ const ProductShowList_2 = ({ searchQuery }) => {
                       name={item.name}
                       price={item.price}
                       product={item}
+                      discount={item.discount}
+                      ratingNumbers={item.number_count_rating}
                       handleAddToCart={handleAddToCart}
                     />
                   </View>

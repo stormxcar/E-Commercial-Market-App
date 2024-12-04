@@ -13,7 +13,8 @@ const ProductCard = ({
   price,
   containerStyles,
   status,
-  displayType
+  displayType,
+  discount
 }) => {
   
   return (
@@ -52,10 +53,10 @@ const ProductCard = ({
           </Text>
           <Text className="text-base font-pregular">${price}</Text>
           <Text className="text-sm font-pregular text-white ml-3 px-2 bg-cyan-400">
-            -20%
+            {discount}%
           </Text>
         </View>
-        <Text className="py-2 text-sm font-pregular px-3">Sold out: 2999</Text>
+        {/* <Text className="py-2 text-sm font-pregular px-3">Sold out: 2999</Text> */}
       </TouchableOpacity>
     </Link>
   );

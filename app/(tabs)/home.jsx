@@ -163,6 +163,7 @@ const Home = ({ navigation }) => {
                   containerStylesImg={
                     (className = "rounded-full bg-purple-100 shadow-sm")
                   }
+                  discount={item.discount}
                 />
               );
             }}
@@ -237,7 +238,13 @@ const Home = ({ navigation }) => {
 
           <View className="flex items-center justify-center mt-3">
             {dataProductDiscount.length > 3 ? (
-              <Link href="../details/ProductList" asChild>
+              <Link
+                href={{
+                  pathname: "../details/productList",
+                  params: { title: "Product list" },
+                }}
+                asChild
+              >
                 <TouchableOpacity className="p-2 bg-[#00bdd6] rounded-md">
                   <Text className="text-white font-pmedium text-base">
                     See more
@@ -253,7 +260,13 @@ const Home = ({ navigation }) => {
             <Text className="text-base font-psemibold text-gray-400">
               Recommended for you
             </Text>
-            <Link href="../details/ProductList" asChild>
+            <Link
+              href={{
+                pathname: "../details/productList",
+                params: { title: "Product list" },
+              }}
+              asChild
+            >
               <TouchableOpacity className="items-center flex flex-row">
                 <Text className="font-base font-psemibold mr-1">View all</Text>
                 <AntDesign name="right" size={16} color="black" />
@@ -272,7 +285,8 @@ const Home = ({ navigation }) => {
                     id={item.id}
                     img={item.img}
                     name={item.name}
-                    countReviews={item.countReviews}
+                    countReviews={item.number_count_rating}
+                    discount={item.discount}
                     price={item.price}
                     productId={item.id}
                     displayType={item.display}

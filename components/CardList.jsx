@@ -13,9 +13,18 @@ const CardList = ({
   imageStyles,
   product,
   handleAddToCart,
+  discount,
+  ratingNumbers,
+  displayType
 }) => {
   return (
-    <Link href="/details/productDetail" asChild>
+    <Link
+    href={{
+      pathname: `../details/ProductDetail_${displayType}`,
+      params: {img,name,price},
+    }}
+    asChild
+  >
       <TouchableOpacity
         className={` ${containerStyles} bg-gray-200 rounded-lg`}
       >
@@ -50,7 +59,7 @@ const CardList = ({
                   <AntDesign name="star" size={14} color="orange" />
                   <AntDesign name="star" size={14} color="orange" />
                 </View>
-                <Text className="text-base font-pregular">(99)</Text>
+                <Text className="text-base font-pregular">({ratingNumbers})</Text>
               </View>
 
               <View className="flex-row mt-3 justify-between w-full">
@@ -60,7 +69,7 @@ const CardList = ({
                   </Text>
                   <Text className="text-base font-pregular">${price}</Text>
                   <Text className="text-sm font-pregular text-white ml-3 px-2 bg-cyan-400">
-                    -20%
+                    {discount}%
                   </Text>
                 </View>
                 <View className="justify-end">

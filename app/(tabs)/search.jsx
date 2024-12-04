@@ -14,6 +14,7 @@ import SearchBox from "../../components/SearchBox";
 import ProductCard from "../../components/ProductCard";
 import CategorySelect from "../../components/CategorySelect";
 import { useNavigation } from "@react-navigation/native";
+import { API_DATA } from "../../constants/data";
 
 const Search = () => {
   const dataSearchPop = [
@@ -43,94 +44,126 @@ const Search = () => {
       img: require("../../assets/images/product_fruit.png"),
     },
   ];
-  const dataCategory = [
-    {
-      id: 1,
-      img: require("../../assets/images/category_phone.png"),
-      categoryName: "Electronics",
-      discount: "10%",
-    },
-    {
-      id: 2,
-      img: require("../../assets/images/category_shoe.png"),
-      categoryName: "Fashion",
-      discount: "20%",
-    },
-    {
-      id: 3,
-      img: require("../../assets/images/category_beauty.png"),
-      categoryName: "Beauty",
-      discount: "30%",
-    },
-    {
-      id: 4,
-      img: require("../../assets/images/category_fruit.png"),
-      categoryName: "Fresh Fruits",
-      discount: "40%",
-    },
-  ];
-  const dataProduct = [
-    {
-      id: 1,
-      img: "https://picsum.photos/200",
-      name: "Product1",
-      countReviews: "10",
-      price: "100",
-      deliveryProcess: "Instant",
-      numberStarRating: 4,
-      otherOption: "Free shipping",
-    },
-    {
-      id: 2,
-      img: "https://picsum.photos/200",
-      name: "Product2",
-      countReviews: "10",
-      price: "299",
-      deliveryProcess: "Instant",
-      numberStarRating: 3,
-      otherOption: "Free shipping",
-    },
-    {
-      id: 3,
-      img: "https://picsum.photos/200",
-      name: "Product3",
-      countReviews: "10",
-      price: "300",
-      deliveryProcess: "Express",
-      numberStarRating: 5,
-      otherOption: "Best sells",
-    },
-    {
-      id: 4,
-      img: "https://picsum.photos/200",
-      name: "Product4",
-      countReviews: "10",
-      price: "699",
-      deliveryProcess: "Standard",
-      numberStarRating: 4,
-      otherOption: "30-day Free Return",
-    },
-    {
-      id: 5,
-      img: "https://picsum.photos/200",
-      name: "Product5",
-      countReviews: "10",
-      price: "450",
-      deliveryProcess: "Standard",
-      numberStarRating: 1,
-      otherOption: "Best sells",
-    },
-  ];
+  // const dataCategory = [
+  //   {
+  //     id: 1,
+  //     img: "https://picsum.photos/200",
+  //     categoryName: "Electronics",
+  //     discount: "10%",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: "https://picsum.photos/200",
+  //     categoryName: "Fashion",
+  //     discount: "20%",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: "https://picsum.photos/200",
+  //     categoryName: "Beauty",
+  //     discount: "30%",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: "https://picsum.photos/200",
+  //     categoryName: "Fresh Fruits",
+  //     discount: "40%",
+  //   },
+  // ];
+  // const dataProduct = [
+  //   {
+  //     id: 1,
+  //     img: "https://picsum.photos/200",
+  //     name: "Product1",
+  //     countReviews: "10",
+  //     price: "100",
+  //     deliveryProcess: "Instant",
+  //     numberStarRating: 4,
+  //     otherOption: "Free shipping",
+  //   },
+  //   {
+  //     id: 2,
+  //     img: "https://picsum.photos/200",
+  //     name: "Product2",
+  //     countReviews: "10",
+  //     price: "299",
+  //     deliveryProcess: "Instant",
+  //     numberStarRating: 3,
+  //     otherOption: "Free shipping",
+  //   },
+  //   {
+  //     id: 3,
+  //     img: "https://picsum.photos/200",
+  //     name: "Product3",
+  //     countReviews: "10",
+  //     price: "300",
+  //     deliveryProcess: "Express",
+  //     numberStarRating: 5,
+  //     otherOption: "Best sells",
+  //   },
+  //   {
+  //     id: 4,
+  //     img: "https://picsum.photos/200",
+  //     name: "Product4",
+  //     countReviews: "10",
+  //     price: "699",
+  //     deliveryProcess: "Standard",
+  //     numberStarRating: 4,
+  //     otherOption: "30-day Free Return",
+  //   },
+  //   {
+  //     id: 5,
+  //     img: "https://picsum.photos/200",
+  //     name: "Product5",
+  //     countReviews: "10",
+  //     price: "450",
+  //     deliveryProcess: "Standard",
+  //     numberStarRating: 1,
+  //     otherOption: "Best sells",
+  //   },
+  // ];
+
+  const [dataCategory, setDataCategory] = useState([]);
+  const [dataProduct, setDataProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const res = await fetch(API_DATA); // Chỉ gọi API một lần
+        const data = await res.json();
+
+        // Cập nhật cả category và product từ dữ liệu nhận được
+        setDataCategory(data?.category || []);
+        setDataProduct(data?.product || []);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+        setDataCategory([]);
+        setDataProduct([]);
+      }
+    };
+
+    fetchData();
+
+    setLoading(false);
+  }, []);
 
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true);
+
   const onRefresh = async () => {
-    setRefreshing(true);
+    // setRefreshing(true);
+    setLoading(true);
     await getData();
-    setRefreshing(false);
+    // setRefreshing(false);
     setLoading(false);
   };
+
+  console.log('====================================');
+  console.log("data product :",dataProduct);
+  console.log('====================================');
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(dataProduct);
   const [filters, setFilters] = useState({
@@ -220,7 +253,7 @@ const Search = () => {
                   <CategorySelect
                     key={item.id}
                     img={item.img}
-                    categoryName={item.categoryName}
+                    categoryName={item.name}
                     containerStyles={(className = "w-[150px]")}
                     containerStylesImg={
                       (className =
@@ -247,20 +280,22 @@ const Search = () => {
             </TouchableOpacity>
           </TouchableOpacity>
           <View className="py-4 flex flex-row flex-wrap justify-between">
-            {/* {loading && (
+            {loading && (
               <View style={styles.loading}>
                 <ActivityIndicator size="large" color="#00bdd6" />
               </View>
-            )} */}
+            )}
             {filteredProducts.map((item) => (
               <View className=" w-[49%] mb-1 " key={item.id}>
                 <ProductCard
                   containerStyles={"w-full"}
                   img={item.img}
                   name={item.name}
-                  countReviews={item.countReviews}
+                  countReviews={item.number_count_rating}
+                  discount={item.discount}
                   price={item.price}
                   productId={item.id}
+                  displayType={item.display}
                 />
               </View>
             ))}

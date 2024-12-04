@@ -25,7 +25,7 @@ import Search from "./search";
 import Favorites from "./favorites";
 import Inbox from "./inbox";
 import Account from "./account";
-import ProductList from "../details/ProductList";
+import ProductList from "../details/productList";
 import ProductList_2 from "../details/ProductList_2";
 import ProductDetail_2 from "../details/ProductDetail_2";
 import Checkout from "../details/Checkout";
@@ -206,13 +206,11 @@ const HeaderRight = () => {
 
           // Lọc các sản phẩm theo user_id
           const userProducts = data.productUser.filter(
-            item => item.user_id === parseInt(userId)
+            (item) => item.user_id === parseInt(userId)
           );
 
           // Đếm số lượng sản phẩm của user
           setCartQuantity(userProducts.length);
-
-         
         } else {
           setCartQuantity(0);
         }

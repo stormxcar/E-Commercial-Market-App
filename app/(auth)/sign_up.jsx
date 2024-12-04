@@ -11,8 +11,10 @@ import React, { useState } from "react";
 import image_main from "../../assets/images/logo_details.png";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { CheckBox } from "react-native-elements";
+import { API_DATA } from "../../constants/data";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -23,36 +25,47 @@ const SignUp = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {
+  const submit = async () => {
     if (form.email === "" || form.password === "" || form.username === "") {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
-    else {
-      // Gửi request lên server
-      fetch('https://6457b6671a4c152cf9887b69.mockapi.io/api/vd1/user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form)
-      })
-      .then(response => {
-        if (!response.ok) {
-          // Xử lý lỗi
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Xử lý dữ liệu trả về từ server
-        console.log('Đăng ký thành công:', data);
-      })
-      .catch(error => {
-        console.error('Lỗi khi đăng ký:', error);
-      });
+    if (form.password !== form.confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
     }
-    // setIsSubmitting(true);
+  
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(API_DATA, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: "register",
+          user_name: form.username,
+          email: form.email,
+          password: form.password
+        })
+      });
+  
+      const data = await response.json();
+      if (data.result === "success") {
+        await AsyncStorage.setItem("user_id", String(data.user_id)); // Lưu user_id
+        Alert.alert("Success", "Đăng ký thành công");
+        router.push("/log_in"); // Điều hướng
+      } else {
+        Alert.alert("Error", data.message || "Đăng ký thất bại");
+      }
+    } catch (error) {
+      console.error('Error during sign up:', error);
+      Alert.alert("Error", "Sign up failed. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+  
+
+
   return (
     <SafeAreaView className="h-full bg-white px-5 py-10">
       <ScrollView showsVerticalScrollIndicator={false}>

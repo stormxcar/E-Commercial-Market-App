@@ -6,40 +6,103 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  FlatList,
+  Dimensions,
 } from "react-native";
-import React from "react";
-// import '../src/styles/tailwind.css';
-import { Link } from "expo-router";
-import image_main from "../assets/images/image_slide_start.png";
-import logo from "../assets/images/logo_main.png";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, router } from "expo-router";
+import Svg, { Defs, LinearGradient, Stop, Rect } from "react-native-svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const { width, height } = Dimensions.get("window");
 
 export default function App() {
+  const images = [
+    { id: 1, source: require("../assets/images/image_slide_start.png") },
+    { id: 2, source: require("../assets/images/image_slide_start_1.png") },
+    { id: 3, source: require("../assets/images/image_slide_start_2.png") },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const flatListRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex]);
+
+  // Xóa user_id khi vào trang
+  useEffect(() => {
+    const clearUserData = async () => {
+      try {
+        await AsyncStorage.removeItem("user_id");
+        console.log("User ID cleared successfully");
+      } catch (error) {
+        console.error("Error clearing user ID:", error);
+      }
+    };
+
+    clearUserData();
+  }, []);
+
+  // Xử lý Continue as guest
+  const handleContinueAsGuest = async () => {
+    try {
+      await AsyncStorage.removeItem("user_id");
+      console.log("User ID cleared for guest");
+      router.push("/home");
+    } catch (error) {
+      console.error("Error handling guest continue:", error);
+    }
+  };
+
   return (
-    <SafeAreaView className="flex-1 w-full h-full">
-      <ImageBackground
-        source={image_main}
-        className="flex-1 items-center flex-col justify-center bg-slate-300"
-      >
-        <View className="flex-1 justify-center items-center p-4 gap-5">
-          <Image source={logo} className="w-20 h-20  object-cover"/>
-          <Text className="text-4xl uppercase font-pblack text-[#00BDD6] text-center leading-none">
+    <SafeAreaView className="flex-1">
+      <View style={styles.overlayContainer}>
+        <Svg height="100%" width="100%" style={styles.svgContainer}>
+          <Defs>
+            <LinearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0%" stopColor="transparent" stopOpacity="0" />
+              <Stop offset="100%" stopColor="rgba(0,0,0,0.8)" stopOpacity="1" />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" />
+        </Svg>
+        <View className="justify-center items-center p-2 mb-40">
+          <Image
+            source={require("../assets/images/logo_main.png")}
+            className="w-20 h-20 object-cover"
+          />
+          <Text className="text-3xl font-pbold uppercase text-[#00bdd6] text-center ">
             BKShop
           </Text>
         </View>
 
-        <View className="border-solid w-[80%] flex-2 flex gap-8 justify-center items-center ">
-          <TouchableOpacity className="p-3 bg-[#00BDD6] rounded-lg w-full">
+        <View className="flex-col justify-center items-center w-full mt-40">
+          <TouchableOpacity className="p-4 w-[80%] bg-[#00BDD6] rounded-lg shadow-lg">
             <Link
-              className="text-white uppercase text-center font-psemibold text-xl cursor-pointer"
+              className="text-white uppercase text-center font-psemibold text-base"
               href="./log_in"
             >
               LOGIN
             </Link>
           </TouchableOpacity>
 
-          <TouchableOpacity className="border-solid border-4 rounded-lg p-3 border-[#00BDD6] w-full cursor-pointer">
+          <TouchableOpacity className="flex-row justify-center items-center w-[80%] border-2 border-[#00BDD6] p-3 mt-4 rounded-lg shadow-sm">
             <Link
-              className="text-[#00BDD6] uppercase text-center text-xl font-psemibold"
+              className="text-white uppercase text-center font-psemibold text-base"
               href="./sign_up"
             >
               REGISTER
@@ -47,12 +110,60 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        <View>
-          <Link className="text-[#00BDD6] m-12" href="/home">
-            Continue as a guest
+        <View className="absolute bottom-0 left-0 right-0 p-5">
+          <Link href="/home" asChild>
+            <TouchableOpacity className="items-center" onPress={handleContinueAsGuest}>
+              <Text className="text-[#00BDD6] items-center">Continue as a guest</Text>
+            </TouchableOpacity>
           </Link>
         </View>
-      </ImageBackground>
+      </View>
+
+      <FlatList
+        ref={flatListRef}
+        data={images}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <ImageBackground
+            source={item.source}
+            style={styles.imageBackground}
+          />
+        )}
+      />
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  overlayContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+  },
+  gradient: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 200, // Adjust the height as needed
+  },
+  svgContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  imageBackground: {
+    width: width,
+    height: height,
+  },
+});

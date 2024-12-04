@@ -46,6 +46,7 @@ const SignUp = () => {
       .then(data => {
         // Xử lý dữ liệu trả về từ server
         console.log('Đăng ký thành công:', data);
+        alert("Đăng ký thành công");
       })
       .catch(error => {
         console.error('Lỗi khi đăng ký:', error);

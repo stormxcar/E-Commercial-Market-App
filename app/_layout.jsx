@@ -1,14 +1,25 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 // import '../src/styles/tailwind.css';
 import { useFonts } from "expo-font";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import ProductDetail_2 from "../components/ProductShowDetail_2";
+// import Toast from "react-native-toast-message";
+import Cart from "../app/details/Cart";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+  useEffect(() => {
+    const clearUserId = async () => {
+      await AsyncStorage.removeItem("user_id");
+      console.log("user_id cleared on app load");
+    };
+
+    clearUserId();
+  }, []);
+
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -42,6 +53,7 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="details" options={{ headerShown: false }} />
       <Stack.Screen
         name="details/ProductList"
         options={{
@@ -86,7 +98,7 @@ const RootLayout = () => {
           ),
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="details/ProductDetail_2"
         options={{
           title: "Detail",
@@ -108,7 +120,12 @@ const RootLayout = () => {
           ),
         }}
       />
-      
+
+      <Stack.Screen name="(tabs)/search" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Cart"
+        options={{ headerShown: false, title: "Cart" }}
+      />
     </Stack>
   );
 };
